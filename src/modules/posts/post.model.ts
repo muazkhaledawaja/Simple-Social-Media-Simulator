@@ -9,6 +9,8 @@ import {
     AutoIncrement,
     ForeignKey,
 } from 'sequelize-typescript';
+import * as moment from 'moment';
+
 
 import { Users } from '../users/user.model';
 
@@ -39,21 +41,35 @@ export class Posts extends Model<Posts> {
     @Column(DataType.BOOLEAN)
     isCommentedAt: boolean;
 
-    @Column(DataType.STRING)
+    @Column({ field: 'createdBy', type: DataType.STRING })
     createdBy: number;
 
-    @Column(DataType.STRING)
+    @Column({ field: 'updatedBy', type: DataType.STRING })
     updatedBy: number;
 
-    @Column(DataType.DATE)
+    @Column({ field: 'createdAt',
+     type: DataType.STRING,
+    defaultValue: moment().format('YYYY-MM-DD HH:mm:ss') })
     createdAt: Date;
 
-    @Column(DataType.DATE)
+    @Column({ field: 'updatedAt',
+     type: DataType.STRING,
+     defaultValue: moment().format('YYYY-MM-DD HH:mm:ss') })
     updatedAt: Date;
 
-    @Column(DataType.DATE)
+    @Column({
+        field: 'deletedAt',
+        type: DataType.STRING,
+        defaultValue: moment().format('YYYY-MM-DD HH:mm:ss')
+    })
     deletedAt: Date;
+    // i want to put default value as new Date()  
 
-    @Column(DataType.STRING)
+    @Column({
+        field: 'deletedBy',
+        type: DataType.STRING,
+        defaultValue: moment().format('YYYY-MM-DD HH:mm:ss'),
+    })
     deletedBy: string;
+
 }

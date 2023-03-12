@@ -6,7 +6,7 @@ import { ConfigService } from "@nestjs/config";
 import { Users } from "src/modules/users/user.model";
 import { Posts } from "src/modules/posts/post.model";
 import { Comments } from "src/modules/comments/comment.model";
-import { SequelizeModuleOptions } from "@nestjs/sequelize";
+
 
  
 export const databaseProviders = [
@@ -15,7 +15,7 @@ export const databaseProviders = [
     inject: [ConfigService],
     useFactory: async (configService: ConfigService) => {
       const sequelize = new Sequelize({
-        ...configService.get('database') as SequelizeModuleOptions,
+        ...configService.get('database') ,
       });
       sequelize.addModels([Users,Posts,Comments]);
       return sequelize;

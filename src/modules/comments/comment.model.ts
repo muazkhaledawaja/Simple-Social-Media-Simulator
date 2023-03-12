@@ -12,6 +12,7 @@ import {
 
 import { Posts } from '../posts/post.model'
 import { Users } from '../users/user.model'
+import moment from 'moment';
 
 @DefaultScope({
   attributes: {
@@ -41,24 +42,42 @@ export class Comments extends Model<Comments> {
   @Column(DataType.STRING)
   commentContent: string;
 
-  @Column(DataType.DATE)
+  @Column({ field: 'createdBy', type: DataType.STRING })
   commentTime: Date;
-  @Column(DataType.STRING)
+  
+  @Column({ field: 'createdBy', type: DataType.STRING })
   createdBy: number;
 
-  @Column(DataType.STRING)
+  @Column({ field: 'updatedBy', type: DataType.STRING })
   updatedBy: number;
 
-  @Column(DataType.DATE)
+  @Column({
+    field: 'createdAt',
+    type: DataType.STRING,
+    defaultValue: moment().format('YYYY-MM-DD HH:mm:ss')
+  })
   createdAt: Date;
 
-  @Column(DataType.DATE)
+  @Column({
+    field: 'updatedAt',
+    type: DataType.STRING,
+    defaultValue: moment().format('YYYY-MM-DD HH:mm:ss')
+  })
   updatedAt: Date;
 
-  @Column(DataType.DATE)
+  @Column({
+    field: 'deletedAt',
+    type: DataType.STRING,
+    defaultValue: moment().format('YYYY-MM-DD HH:mm:ss')
+  })
   deletedAt: Date;
+  // i want to put default value as new Date()  
 
-  @Column(DataType.STRING)
+  @Column({
+    field: 'deletedBy',
+    type: DataType.STRING,
+    defaultValue: moment().format('YYYY-MM-DD HH:mm:ss'),
+  })
   deletedBy: string;
 
 }

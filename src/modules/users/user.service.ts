@@ -10,7 +10,9 @@ import {
 import { SignupDto, LoginDto } from './dto';
 import { User } from 'src/common/types';
 import { ERRORS, PROVIDERS } from 'src/common/constants';
-import { generateToken, hashedPassword, comparePassword } from 'src/common/utils';
+import { generateToken, comparePassword } from 'src/common/utils';
+import * as bcrypt from 'bcrypt';
+
 
 import { Users } from './user.model';
 
@@ -20,6 +22,10 @@ export class UserService {
         @Inject(PROVIDERS.USERS_PROVIDER)
         private readonly usersRepository: typeof Users,
     ) { }
+
+    async getAllUsers(): Promise<Users[]> {
+        return this.usersRepository.findAll();
+    }
 
     async getUser(userNameOrEmail: {
         email?: string;
@@ -49,10 +55,15 @@ export class UserService {
                 throw new HttpException(ERRORS.USER_ALREADY_EXISTS, HttpStatus.BAD_REQUEST, { cause: new Error('Some error') });
             }
             // hash password and create user
-            user.password = hashedPassword(user.password);
+            user.password = await bcrypt.hash(user.password, 10);
             const newUser = await this.usersRepository.create({ ...user });
             return {
-                user: { id: newUser.id, role: newUser.role, email: newUser.email, username: newUser.username, }, token: generateToken(newUser.username),
+                user: {
+                    id: newUser.id,
+                    role: newUser.role,
+                    email: newUser.email,
+                    username: newUser.username,
+                }, token: generateToken(newUser.username),
             }
         } catch (err) {
             throw new InternalServerErrorException(err);
