@@ -23,7 +23,7 @@ import { Users } from '../users/user.model';
     paranoid: true,
     underscored: true,
 })
-export class Posts extends Model {
+export class Posts extends Model<Posts> {
     @PrimaryKey
     @AutoIncrement
     @Column(DataType.INTEGER)

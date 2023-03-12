@@ -38,7 +38,7 @@ export class UserService {
         })
     }
 
-    async signup(user: SignupDto): Promise<User> {
+    async signup(user: SignupDto): Promise<User | null> {
         try {
             // check if user already exists
             const existUser = await this.getUser({
@@ -46,14 +46,13 @@ export class UserService {
                 username: user.username,
             })
             if (existUser) {
-                throw new HttpException(ERRORS.USER_ALREADY_EXISTS, HttpStatus.BAD_REQUEST);
+                throw new HttpException(ERRORS.USER_ALREADY_EXISTS, HttpStatus.BAD_REQUEST, { cause: new Error('Some error') });
             }
             // hash password and create user
             user.password = hashedPassword(user.password);
             const newUser = await this.usersRepository.create({ ...user });
             return {
-                user: { id: newUser.id, role: newUser.role, email: newUser.email, username: newUser.username, }
-                , token: generateToken(newUser.username),
+                user: { id: newUser.id, role: newUser.role, email: newUser.email, username: newUser.username, }, token: generateToken(newUser.username),
             }
         } catch (err) {
             throw new InternalServerErrorException(err);
@@ -72,7 +71,7 @@ export class UserService {
                     statusCode: HttpStatus.UNAUTHORIZED,
                     message: ERRORS.INCORRECT_DATA,
                 },
-                    HttpStatus.UNAUTHORIZED);
+                    HttpStatus.UNAUTHORIZED, { cause: new Error('Some error') });
             }
             // check if password is correct
             const isPassWordCorrect = await comparePassword(
@@ -87,6 +86,7 @@ export class UserService {
                         message: ERRORS.INCORRECT_DATA,
                     },
                     HttpStatus.UNAUTHORIZED,
+                    { cause: new Error('Some error') }
                 );
             }
             return {

@@ -13,7 +13,6 @@ import config from 'config';
   imports: [
     UserModule,
     CommentModule,
-    DatabaseModule,
     PostModule,
     ConfigModule.forRoot({
       load: [config],
@@ -21,5 +20,6 @@ import config from 'config';
   
     }),
   ],
+  providers: [ DatabaseModule,],
 })
 export class AppModule {}

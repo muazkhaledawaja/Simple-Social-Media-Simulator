@@ -24,7 +24,7 @@ import { Users } from '../users/user.model'
   paranoid: true,
   underscored: true,
 })
-export class Comments extends Model {
+export class Comments extends Model<Comments> {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)

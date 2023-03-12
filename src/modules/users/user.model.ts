@@ -30,7 +30,7 @@ timestamps: true,
 paranoid: true,
 underscored: true,
 })
-export class Users extends Model {
+export class Users extends Model<Users> {
 @PrimaryKey
 @AutoIncrement
 @Column(DataType.INTEGER)
