@@ -8,8 +8,10 @@ import {
     PrimaryKey,
     AutoIncrement,
     ForeignKey,
+     BelongsTo 
 } from 'sequelize-typescript';
 import * as moment from 'moment';
+ 
 
 
 import { Users } from '../users/user.model';
@@ -35,7 +37,7 @@ export class Posts extends Model<Posts> {
     @Column(DataType.INTEGER)
     userId: number;
 
-    @Column(DataType.STRING)
+    @Column({ field: 'postContent', type: DataType.STRING })
     postContent: string;
 
     @Column(DataType.BOOLEAN)
@@ -71,5 +73,9 @@ export class Posts extends Model<Posts> {
         defaultValue: moment().format('YYYY-MM-DD HH:mm:ss'),
     })
     deletedBy: string;
+
+    @BelongsTo(() => Users)
+    user: Users;
+
 
 }

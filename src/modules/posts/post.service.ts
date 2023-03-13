@@ -11,6 +11,7 @@ import { POST } from 'src/common/types';
 
 import { CommentService } from '../comments/comment.service';
 import { CommentDto } from './dto/comment.dto';
+import { PostDto } from './dto/post.dto';
 
 import { ERRORS, PROVIDERS } from 'src/common/constants';
 
@@ -21,6 +22,19 @@ export class PostService {
     private postRepository: typeof Posts,
     private readonly commentService: CommentService,
   ) { }
+ 
+  // Create a post
+  async createPost(  post: PostDto): Promise<Posts> {
+    try {
+      const newPost = await this.postRepository.create<Posts>({
+        ...post,
+    
+      });
+      return newPost;
+    } catch (err) {
+      throw new InternalServerErrorException(err);
+    }
+  }
 
   // Get all posts
   async getAllPosts(limit: number, offset: number): Promise<Posts[]> {

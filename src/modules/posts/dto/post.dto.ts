@@ -3,8 +3,8 @@
 
 import { IsNotEmpty, IsString } from "class-validator";
 
-export class CommentDto {
+export class PostDto {
   @IsNotEmpty()
   @IsString()
-  readonly Commentcontent: string;
+  readonly postContent: string;
 }

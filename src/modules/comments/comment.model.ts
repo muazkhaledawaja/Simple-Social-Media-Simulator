@@ -12,7 +12,8 @@ import {
 
 import { Posts } from '../posts/post.model'
 import { Users } from '../users/user.model'
-import moment from 'moment';
+import * as moment from 'moment';
+
 
 @DefaultScope({
   attributes: {
@@ -39,7 +40,7 @@ export class Comments extends Model<Comments> {
   @Column(DataType.INTEGER)
   postId: number;
 
-  @Column(DataType.STRING)
+  @Column({ field: 'commentContent', type: DataType.STRING })
   commentContent: string;
 
   @Column({ field: 'createdBy', type: DataType.STRING })

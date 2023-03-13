@@ -26,7 +26,7 @@ export class UserService {
     async getAllUsers(): Promise<Users[]> {
         return this.usersRepository.findAll();
     }
-
+    //function to check if user already exists
     async getUser(userNameOrEmail: {
         email?: string;
         username?: string;
@@ -43,62 +43,64 @@ export class UserService {
             }
         })
     }
-
+    //function to create new user
     async signup(user: SignupDto): Promise<User | null> {
         try {
             // check if user already exists
-            const existUser = await this.getUser({
-                email: user.email,
-                username: user.username,
-            })
+            const existUser = await this.usersRepository.findOne({
+                where: {
+                    email: user.email,
+                    username: user.username,
+                },
+            });
             if (existUser) {
                 throw new HttpException(ERRORS.USER_ALREADY_EXISTS, HttpStatus.BAD_REQUEST, { cause: new Error('Some error') });
             }
-            // hash password and create user
-            user.password = await bcrypt.hash(user.password, 10);
-            const newUser = await this.usersRepository.create({ ...user });
+            // hash password
+            const hashedPassword = await bcrypt.hash(user.password, 10);
+            // create user
+            const newUser = await this.usersRepository.create({
+                email: user.email,
+                username: user.username,
+                password: hashedPassword,
+                role: user.role,
+            });
             return {
                 user: {
                     id: newUser.id,
                     role: newUser.role,
                     email: newUser.email,
                     username: newUser.username,
-                }, token: generateToken(newUser.username),
-            }
-        } catch (err) {
-            throw new InternalServerErrorException(err);
+                },
+                token: generateToken(newUser.username),
+            };
+
+        } catch (error) {
+            throw new InternalServerErrorException(error)
+
         }
     }
-
+    //function to login user
     async login(loginDetails: LoginDto): Promise<User> {
         try {
-            // user can login with right credentials
-            const user = await this.getUser({
-                email: loginDetails.userNameOrEmail,
-                username: loginDetails.userNameOrEmail,
-            })
-            if (!user) {
-                throw new HttpException({
-                    statusCode: HttpStatus.UNAUTHORIZED,
-                    message: ERRORS.INCORRECT_DATA,
+            // check if user exists
+            const user = await this.usersRepository.findOne({
+                where:
+                {
+                    username: loginDetails.username,
+                    email: loginDetails.email,
                 },
-                    HttpStatus.UNAUTHORIZED, { cause: new Error('Some error') });
+            });
+            if (!user) {
+                throw new HttpException(ERRORS.User_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
             // check if password is correct
-            const isPassWordCorrect = await comparePassword(
+            const isPasswordCorrect = await comparePassword(
                 loginDetails.password,
                 user.password,
-            )
-            // if password is incorrect
-            if (!isPassWordCorrect) {
-                throw new HttpException(
-                    {
-                        statusCode: HttpStatus.UNAUTHORIZED,
-                        message: ERRORS.INCORRECT_DATA,
-                    },
-                    HttpStatus.UNAUTHORIZED,
-                    { cause: new Error('Some error') }
-                );
+            );
+            if (!isPasswordCorrect) {
+                throw new HttpException(ERRORS.INCORRECT_DATA, HttpStatus.BAD_REQUEST);
             }
             return {
                 user: {
@@ -108,12 +110,10 @@ export class UserService {
                     username: user.username,
                 },
                 token: generateToken(user.username),
-            }
+            };
+        } catch (error) {
+            throw new InternalServerErrorException(error)
         }
-        catch (err) {
-            throw new InternalServerErrorException(err);
-        }
-
     }
 
 

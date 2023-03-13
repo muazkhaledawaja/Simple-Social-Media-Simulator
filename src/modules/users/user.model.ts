@@ -11,8 +11,10 @@ import {
     AutoIncrement,
     Unique,
     DefaultScope,
+    HasMany     
 } from 'sequelize-typescript';
 import { ROLES } from 'src/common/enum';
+import { Posts } from '../posts/post.model';
 
 @DefaultScope({
     attributes: {
@@ -83,6 +85,7 @@ export class Users extends Model<Users> {
     })
     deletedBy: string;
 
-}
+    @HasMany(() => Posts)
+    posts: Posts[];
 
-/*npx sequelize-cli model:generate --name Posts --attributes commentContent:string,isCommentedAt:boolean,userId:integer,postId:integer,createdBy:integer,updatedBy:integer,commentTime:Date,createdAt:Date,updatedAt:Date,deletedAt:Date,deletedBy:string */
+}
