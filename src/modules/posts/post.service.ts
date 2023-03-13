@@ -62,23 +62,21 @@ export class PostService {
   }
 
   // Find one post by with comments
-
   async findPostWithComments(postId: number): Promise<POST> {
-    try {
-
-      const post = await this.postRepository.findOne({
-        where: { id: postId },
-      })
-      // check if post exists
-      if (!post) {
-        throw new HttpException(ERRORS.POST_NOT_FOUND, 404);
-      }
-      // get comments
-      const comments = await this.commentService.findAllComments(postId);
-      return { post, comments };
-    } catch (err) {
-      throw new InternalServerErrorException(err);
+// find post with try catch
+try{
+    const post = await this.postRepository.findOne({
+      where: { id: postId },
+    });
+    if (!post) {
+      throw new HttpException(ERRORS.POST_NOT_FOUND, 404);
     }
+    // find comments
+    const comments = await this.commentService.findAllComments(postId);
+    return { post, comments };
+  }catch(err){
+    throw new InternalServerErrorException(err);
+  }
   }
 
   // create or update comment on post

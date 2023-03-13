@@ -47,13 +47,20 @@ export class UserService {
     async signup(user: SignupDto): Promise<User | null> {
         try {
             // check if user already exists
-            const existUser = await this.usersRepository.findOne({
+            const checkUserWithEmail = await this.usersRepository.findOne({
                 where: {
                     email: user.email,
+                },
+            });
+            if (checkUserWithEmail) {
+                throw new HttpException(ERRORS.USER_ALREADY_EXISTS, HttpStatus.BAD_REQUEST, { cause: new Error('Some error') });
+            }
+            const checkUserWithUsername = await this.usersRepository.findOne({
+                where: {
                     username: user.username,
                 },
             });
-            if (existUser) {
+            if (checkUserWithUsername) {
                 throw new HttpException(ERRORS.USER_ALREADY_EXISTS, HttpStatus.BAD_REQUEST, { cause: new Error('Some error') });
             }
             // hash password
@@ -71,8 +78,7 @@ export class UserService {
                     role: newUser.role,
                     email: newUser.email,
                     username: newUser.username,
-                },
-                token: generateToken(newUser.username),
+                }
             };
 
         } catch (error) {
@@ -81,7 +87,7 @@ export class UserService {
         }
     }
     //function to login user
-    async login(loginDetails: LoginDto): Promise<User> {
+    async login(loginDetails: LoginDto): Promise<any> {
         try {
             // check if user exists
             const user = await this.usersRepository.findOne({

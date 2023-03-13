@@ -9,7 +9,6 @@ export type User = {
     username: string;
     role: ROLES;
   };
-  token: string;
 };
 
 export type POST = {

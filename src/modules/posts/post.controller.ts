@@ -8,7 +8,8 @@ import {
     Query,
     Controller,
     ParseIntPipe,
-    // UseGuards,
+    UnauthorizedException,
+
 } from '@nestjs/common';
 
 import { PostService } from './post.service';
@@ -17,12 +18,12 @@ import { CommentDto } from './dto/comment.dto';
 import { Posts } from './post.model';
 import { Roles, User } from 'src/common/decorators';
 import { ROLES } from 'src/common/enum';
-// import { AuthGuard, RolesGuard } from 'src/common/guards';
+
 @Controller('posts')
 export class PostController {
     constructor(private readonly postService: PostService) { }
 
-    // @UseGuards(AuthGuard, RolesGuard)
+
     //create a new post
     @Roles(ROLES.USER)
     @Post()
@@ -33,7 +34,7 @@ export class PostController {
         return this.postService.createPost(post);
     }
 
-
+    //get all posts
     @Roles(ROLES.USER)
     @Get()
     findAll(
@@ -43,15 +44,21 @@ export class PostController {
         return this.postService.getAllPosts(limit, offset);
     }
 
+    //get a post by id
     @Roles(ROLES.USER)
     @Get(':postId')
-    findOne(
-        @Param('postId', ParseIntPipe) postid: number,
-        @User() user: { id: number },
+    async findOne(
+      @Param('postId', ParseIntPipe) postId: number,
+      @User() user: { id: number },
     ): Promise<Posts> {
-        return this.postService.getPostById(postid, user.id);
+        console.log(user);
+        
+      if (!user) {
+        throw new UnauthorizedException('User not found');
+      }
+      return this.postService.getPostById(postId, user.id);
     }
-
+    //update a post
     @Roles(ROLES.ADMIN)
     @Put(':postId/comments')
     createOrUpdateComment(
@@ -61,7 +68,7 @@ export class PostController {
     ): Promise<CommentDto> {
         return this.postService.createOrUpdateComment(postId, user.id, comment);
     }
-
+// create a comment
     @Roles(ROLES.USER)
     @Post(':postId/comments')
     createComment(
@@ -69,6 +76,6 @@ export class PostController {
         @User() user: { id: number },
         @Body() comment: CommentDto,
     ): Promise<CommentDto> {
-        return this.postService.createOrUpdateComment(postId, user.id, comment);
+        return this.postService.updataComment(postId, user.id, comment);
     }
 }
