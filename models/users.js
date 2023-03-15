@@ -1,5 +1,3 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/no-var-requires */
 'use strict';
 const {
   Model
@@ -24,8 +22,8 @@ module.exports = (sequelize, DataTypes) => {
     updatedBy: DataTypes.INTEGER,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
-    deletedAt: DataTypes.DATE,
-    deletedBy: DataTypes.STRING
+    deletedBy: DataTypes.STRING,
+    deletedAt: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'Users',

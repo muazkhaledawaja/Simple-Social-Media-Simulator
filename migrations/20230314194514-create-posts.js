@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -14,9 +15,6 @@ module.exports = {
       },
       isCommentedAt: {
         type: Sequelize.BOOLEAN
-      },
-      userId: {
-        type: Sequelize.INTEGER
       },
       createdBy: {
         type: Sequelize.INTEGER
@@ -35,6 +33,15 @@ module.exports = {
       },
       deletedBy: {
         type: Sequelize.STRING
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Users', // name of the referenced table
+          key: 'id' // primary key of the referenced table
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       createdAt: {
         allowNull: false,

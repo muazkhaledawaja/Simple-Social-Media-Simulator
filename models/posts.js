@@ -16,13 +16,13 @@ module.exports = (sequelize, DataTypes) => {
   Posts.init({
     postContent: DataTypes.STRING,
     isCommentedAt: DataTypes.BOOLEAN,
-    userId: DataTypes.INTEGER,
     createdBy: DataTypes.INTEGER,
     updatedBy: DataTypes.INTEGER,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
     deletedAt: DataTypes.DATE,
-    deletedBy: DataTypes.STRING
+    deletedBy: DataTypes.STRING,
+    userId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Posts',

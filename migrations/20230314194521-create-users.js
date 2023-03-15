@@ -1,25 +1,26 @@
+/* eslint-disable prettier/prettier */
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('comments', {
+    await queryInterface.createTable('Users', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      commentContent: {
+      username: {
         type: Sequelize.STRING
       },
-      isCommentedAt: {
-        type: Sequelize.BOOLEAN
+      password: {
+        type: Sequelize.STRING
       },
-      userId: {
-        type: Sequelize.INTEGER
+      email: {
+        type: Sequelize.STRING
       },
-      postId: {
-        type: Sequelize.INTEGER
+      role: {
+        type: Sequelize.STRING
       },
       createdBy: {
         type: Sequelize.INTEGER
@@ -27,20 +28,17 @@ module.exports = {
       updatedBy: {
         type: Sequelize.INTEGER
       },
-      commentTime: {
-        type: Sequelize.DATE
-      },
       createdAt: {
         type: Sequelize.DATE
       },
       updatedAt: {
         type: Sequelize.DATE
       },
-      deletedAt: {
-        type: Sequelize.DATE
-      },
       deletedBy: {
         type: Sequelize.STRING
+      },
+      deletedAt: {
+        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,
@@ -53,6 +51,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('comments');
+    await queryInterface.dropTable('Users');
   }
 };

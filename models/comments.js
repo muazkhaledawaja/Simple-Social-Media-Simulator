@@ -1,11 +1,9 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/no-var-requires */
 'use strict';
 const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class comments extends Model {
+  class Comments extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -15,21 +13,20 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  comments.init({
+  Comments.init({
     commentContent: DataTypes.STRING,
-    isCommentedAt: DataTypes.BOOLEAN,
-    userId: DataTypes.INTEGER,
-    postId: DataTypes.INTEGER,
+    commentTime: DataTypes.DATE,
     createdBy: DataTypes.INTEGER,
     updatedBy: DataTypes.INTEGER,
-    commentTime: DataTypes.DATE,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
     deletedAt: DataTypes.DATE,
-    deletedBy: DataTypes.STRING
+    deletedBy: DataTypes.STRING,
+    userId: DataTypes.INTEGER,
+    postId: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'comments',
+    modelName: 'Comments',
   });
-  return comments;
+  return Comments;
 };

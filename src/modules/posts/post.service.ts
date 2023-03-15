@@ -22,13 +22,13 @@ export class PostService {
     private postRepository: typeof Posts,
     private readonly commentService: CommentService,
   ) { }
- 
+
   // Create a post
-  async createPost(  post: PostDto): Promise<Posts> {
+  async createPost(post: PostDto): Promise<Posts> {
     try {
       const newPost = await this.postRepository.create<Posts>({
         ...post,
-    
+
       });
       return newPost;
     } catch (err) {
@@ -40,12 +40,13 @@ export class PostService {
   async getAllPosts(limit: number, offset: number): Promise<Posts[]> {
     try {
       const posts = await this.postRepository.findAll({
-        limit,
-        offset,
+        limit: limit || 10,
+        offset: offset || 0,
         order: [
           ['createdAt', 'DESC'],
-          ['isCommentedAt', 'ASC'],
+
         ],
+         
       })
       return posts;
     } catch (err) {
@@ -54,67 +55,72 @@ export class PostService {
   }
 
   // Get post by id
-  async getPostById(postId: number,userId:number): Promise<Posts> {
+  async getPostById(postId: number, userId: number): Promise<Posts> {
     return await this.postRepository.findOne({
-      where: { id: postId,
-        userId:userId },
+      where: {
+        id: postId,
+        userId: userId
+      },
+       
+
     })
   }
 
   // Find one post by with comments
   async findPostWithComments(postId: number): Promise<POST> {
-// find post with try catch
-try{
-    const post = await this.postRepository.findOne({
-      where: { id: postId },
-    });
-    if (!post) {
-      throw new HttpException(ERRORS.POST_NOT_FOUND, 404);
+
+    try {
+      const post = await this.postRepository.findOne({
+        where: { id: postId },
+         
+      });
+      if (!post) {
+        throw new HttpException(ERRORS.POST_NOT_FOUND, 404);
+      }
+      // find comments
+      const comments = await this.commentService.findAllComments(postId);
+      return { post, comments };
+    } catch (err) {
+      throw new InternalServerErrorException(err);
     }
-    // find comments
-    const comments = await this.commentService.findAllComments(postId);
-    return { post, comments };
-  }catch(err){
-    throw new InternalServerErrorException(err);
-  }
   }
 
   // create or update comment on post
-  async createOrUpdateComment(postId:number,userId:number,comment:CommentDto):Promise<CommentDto>{
+  async createOrUpdateComment(postId: number, userId: number, comment: CommentDto): Promise<CommentDto> {
     // check if post exists
-    const post = await this.getPostById(postId,userId)
-    if(!post){
-      throw new HttpException(ERRORS.POST_NOT_FOUND,404)
+    const post = await this.getPostById(postId, userId)
+    if (!post) {
+      throw new HttpException(ERRORS.POST_NOT_FOUND, 404)
     }
-    await this.updataComment(postId,userId,comment)
+    await this.updataComment(postId, userId, comment)
     return comment
   }
 
-    // update a comment if found or create it for a post
-    async updataComment(
-      postId: number,
-      userId: number,
-      comment: CommentDto,
-    ): Promise<CommentDto> {
-      try {
-        const foundComment = await this.commentService.findOne(postId, userId);
-        if (foundComment) {
-          await this.commentService.updateComment(
-            postId,
-            userId,
-            comment,
-        
-          );
-        } else {
-          await this.commentService.createComment(postId, userId, comment);
-        }
-        return comment;
-      } catch (err) {
-        throw new InternalServerErrorException(err);
-      }
-    }
+  // update a comment if found or create it for a post
+  async updataComment(
+    postId: number,
+    userId: number,
+    comment: CommentDto,
+  ): Promise<CommentDto> {
+    try {
+      const foundComment = await this.commentService.findOne(postId, userId,);
+      if (foundComment) {
+        await this.commentService.updateComment(
+          postId,
+          userId,
+          comment,
 
-  
-  
+        );
+      } else {
+        await this.commentService.createComment(postId, userId, comment);
+      }
+      return comment;
+    } catch (err) {
+      throw new InternalServerErrorException(err);
+    }
+  }
+
+
+
 
 }

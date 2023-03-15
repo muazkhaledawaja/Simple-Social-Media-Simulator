@@ -7,7 +7,7 @@ import {
   PrimaryKey,
   ForeignKey,
   AutoIncrement,
-  DefaultScope,
+  Scopes,
 } from 'sequelize-typescript'
 
 import { Posts } from '../posts/post.model'
@@ -15,16 +15,29 @@ import { Users } from '../users/user.model'
 import * as moment from 'moment';
 
 
-@DefaultScope({
-  attributes: {
-    exclude: ['deletedAt', 'deletedBy'],
-  }
-})
+ 
 @Table({
   tableName: 'comments',
   timestamps: true,
   paranoid: true,
   underscored: true,
+ 
+})
+ 
+@Scopes(() => {
+  return {
+    basic: {
+      attributes: {
+        exclude: [
+          'updatedAt',
+          'createdAt',
+          'updatedBy',
+          'deletedAt',
+          'deletedBy',
+        ],
+      },
+    },
+  };
 })
 export class Comments extends Model<Comments> {
   @PrimaryKey
@@ -82,3 +95,5 @@ export class Comments extends Model<Comments> {
   deletedBy: string;
 
 }
+
+

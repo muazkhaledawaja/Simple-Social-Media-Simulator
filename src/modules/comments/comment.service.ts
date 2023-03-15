@@ -16,6 +16,7 @@ export class CommentService {
     async findAllComments(postId: number): Promise<Comments[]> {
         const comments = await this.commentRepository.findAll({
             where: { postId },
+
             order: [['createdAt', 'DESC']],
         })
         return comments;
@@ -25,6 +26,7 @@ export class CommentService {
     async findOne(postId: number, userId: number): Promise<Comments> {
         const comment = await this.commentRepository.findOne({
             where: { postId, userId },
+
         })
         return comment;
     }
@@ -50,6 +52,7 @@ export class CommentService {
             },
             {
                 where: { postId, userId },
+
             }
         )
     }

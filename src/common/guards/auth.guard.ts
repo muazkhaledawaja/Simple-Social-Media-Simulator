@@ -20,13 +20,11 @@ export class AuthGuard implements CanActivate {
         if (isPublic) return true;
 
         const request = context.switchToHttp().getRequest();
-        console.log(55555555, request.headers)
         const token = request.headers.authorization || request.headers['x-access-token'] || request.headers.token;
         if (!token) return false;
 
 
         const decoded = verifyToken(token, SYSTEM.SECRET);
-        console.log(33333333, decoded);
         if (!decoded) return false;
 
 
@@ -34,10 +32,8 @@ export class AuthGuard implements CanActivate {
             username: decoded.username,
             email: decoded.email
         })
-        console.log(22222222, userCheck);
 
         if (!userCheck) return false;
-        console.log(11111111, userCheck);
 
         request.user = userCheck;
 

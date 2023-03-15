@@ -8,17 +8,18 @@ import { Posts } from "src/modules/posts/post.model";
 import { Comments } from "src/modules/comments/comment.model";
 
 
- 
+
 export const databaseProviders = [
   {
     provide: 'SEQUELIZE',
     inject: [ConfigService],
     useFactory: async (configService: ConfigService) => {
       const sequelize = new Sequelize({
-        ...configService.get('database') ,
+        ...configService.get('database'),
       });
-      sequelize.addModels([Users,Posts,Comments]);
+      sequelize.addModels([Users, Posts, Comments]);
+      console.log(sequelize.models);
       return sequelize;
     },
   },
-] ;
+];

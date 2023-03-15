@@ -8,8 +8,6 @@ import {
     Query,
     Controller,
     ParseIntPipe,
-    UnauthorizedException,
-
 } from '@nestjs/common';
 
 import { PostService } from './post.service';
@@ -48,15 +46,10 @@ export class PostController {
     @Roles(ROLES.USER)
     @Get(':postId')
     async findOne(
-      @Param('postId', ParseIntPipe) postId: number,
-      @User() user: { id: number },
+        @Param('postId', ParseIntPipe) postId: number,
+        @User() user: { id: number },
     ): Promise<Posts> {
-        console.log(user);
-        
-      if (!user) {
-        throw new UnauthorizedException('User not found');
-      }
-      return this.postService.getPostById(postId, user.id);
+        return await this.postService.getPostById(postId, user.id);
     }
     //update a post
     @Roles(ROLES.ADMIN)
@@ -68,7 +61,7 @@ export class PostController {
     ): Promise<CommentDto> {
         return this.postService.createOrUpdateComment(postId, user.id, comment);
     }
-// create a comment
+    // create a comment
     @Roles(ROLES.USER)
     @Post(':postId/comments')
     createComment(

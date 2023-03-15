@@ -3,12 +3,12 @@ import {
     Model,
     Table,
     Column,
-    DefaultScope,
     DataType,
     PrimaryKey,
     AutoIncrement,
     ForeignKey,
-     BelongsTo 
+    Scopes,
+ 
 } from 'sequelize-typescript';
 import * as moment from 'moment';
  
@@ -16,17 +16,30 @@ import * as moment from 'moment';
 
 import { Users } from '../users/user.model';
 
-@DefaultScope({
-    attributes: {
-        exclude: ['deletedAt'],
-    }
-})
+ 
 @Table({
     tableName: 'posts',
     timestamps: true,
     paranoid: true,
     underscored: true,
+ 
 })
+
+@Scopes(() => {
+    return {
+      basic: {
+        attributes: {
+          exclude: [
+            'updatedAt',
+            'createdAt',
+            'updatedBy',
+            'deletedAt',
+            'deletedBy',
+          ],
+        },
+      },
+    };
+  })
 export class Posts extends Model<Posts> {
     @PrimaryKey
     @AutoIncrement
@@ -34,13 +47,14 @@ export class Posts extends Model<Posts> {
     id: number;
 
     @ForeignKey(() => Users)
-    @Column(DataType.INTEGER)
+    @Column({ field: 'userId', type: DataType.INTEGER })
     userId: number;
 
     @Column({ field: 'postContent', type: DataType.STRING })
     postContent: string;
 
-    @Column(DataType.BOOLEAN)
+    @Column({ field: 'isCommentedAt', type: DataType.BOOLEAN })
+
     isCommentedAt: boolean;
 
     @Column({ field: 'createdBy', type: DataType.STRING })
@@ -73,9 +87,6 @@ export class Posts extends Model<Posts> {
         defaultValue: moment().format('YYYY-MM-DD HH:mm:ss'),
     })
     deletedBy: string;
-
-    @BelongsTo(() => Users)
-    user: Users;
-
+ 
 
 }
