@@ -10,8 +10,8 @@ export const verifyToken = (token, secret) =>
     return decode;
   });
 
-export const generateToken = (username: string) => {
-  return jwt.sign({ username }, SYSTEM.SECRET, {
+export const generateToken = (username: string,id:number) => {
+  return jwt.sign({ username ,id }, SYSTEM.SECRET, {
     expiresIn: '10h',
   });
 };

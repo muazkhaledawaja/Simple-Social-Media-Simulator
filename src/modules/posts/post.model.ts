@@ -53,15 +53,12 @@ export class Posts extends Model<Posts> {
     @Column({ field: 'postContent', type: DataType.STRING })
     postContent: string;
 
-    @Column({ field: 'isCommentedAt', type: DataType.BOOLEAN })
-
-    isCommentedAt: boolean;
-
+    
     @Column({ field: 'createdBy', type: DataType.STRING })
-    createdBy: number;
+    createdBy: string;
 
     @Column({ field: 'updatedBy', type: DataType.STRING })
-    updatedBy: number;
+    updatedBy: string;
 
     @Column({ field: 'createdAt',
      type: DataType.STRING,
@@ -79,14 +76,15 @@ export class Posts extends Model<Posts> {
         defaultValue: moment().format('YYYY-MM-DD HH:mm:ss')
     })
     deletedAt: Date;
-    // i want to put default value as new Date()  
+ 
 
     @Column({
         field: 'deletedBy',
         type: DataType.STRING,
-        defaultValue: moment().format('YYYY-MM-DD HH:mm:ss'),
     })
     deletedBy: string;
+
+    
  
 
 }

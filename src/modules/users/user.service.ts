@@ -84,6 +84,8 @@ export class UserService {
     async login(loginDetails: LoginDto): Promise<any> {
         try {
             // check if user exists
+            console.log(loginDetails);
+            
             const user = await this.usersRepository.findOne({
                 where:
                 {
@@ -107,11 +109,12 @@ export class UserService {
             return {
                 user: {
                     id: user.id,
-                    role: user.role,
                     email: user.email,
                     username: user.username,
+                    role: user.role,
+
                 },
-                token: generateToken(user.username),
+                token: generateToken(user.username, user.id),
             };
         } catch (error) {
             throw new InternalServerErrorException(error)

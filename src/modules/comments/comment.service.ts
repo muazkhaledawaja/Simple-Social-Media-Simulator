@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { CommentDto } from 'src/modules/posts/dto/comment.dto';
-import { Inject, Injectable } from '@nestjs/common';
-import { PROVIDERS, SYSTEM } from 'src/common/constants';
+import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { PROVIDERS, ERRORS } from 'src/common/constants';
 import { Comments } from './comment.model';
 
 @Injectable()
@@ -32,8 +32,13 @@ export class CommentService {
     }
 
     // create a comment for a post
-    async createComment(postId: number, userId: number, commentDto: CommentDto): Promise<Comments> {
-        const comment = await this.commentRepository.create({
+    async createComment(
+        postId: number,
+        userId: number,
+        commentDto: CommentDto
+    ): Promise<Comments> {
+
+        const comment = await this.commentRepository.create<Comments>({
             ...commentDto,
             postId,
             userId,
@@ -44,17 +49,21 @@ export class CommentService {
     }
 
     // update a comment for a post
-    async updateComment(postId: number, userId: number, commentDto: CommentDto): Promise<void> {
-        await this, this.commentRepository.update(
-            {
-                ...commentDto, postId, userId, updatedBy: userId
+    async updateComment(
+        postId: number,
+        userId: number,
+        commentDto: CommentDto
+    ): Promise<void> {
 
-            },
-            {
-                where: { postId, userId },
+        await this, this.commentRepository.update({
+            ...commentDto,
+            postId,
+            userId,
+            updatedBy: userId
 
-            }
-        )
-    }
+        },
+            {
+                where: { postId, userId }
+            })}
 
 }

@@ -66,12 +66,11 @@ export class Users extends Model<Users> {
   @Column(DataType.STRING)
   email: string;
 
-  // make the column felid name as firstName
   @Column({ field: 'createdBy', type: DataType.STRING })
-  createdBy: number;
+  createdBy: string;
 
   @Column({ field: 'updatedBy', type: DataType.STRING })
-  updatedBy: number;
+  updatedBy: string;
 
   @Column({
     field: 'createdAt',
@@ -97,7 +96,6 @@ export class Users extends Model<Users> {
   @Column({
     field: 'deletedBy',
     type: DataType.STRING,
-    defaultValue: moment().format('YYYY-MM-DD HH:mm:ss'),
   })
   deletedBy: string;
 

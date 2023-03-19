@@ -8,6 +8,8 @@ import {
     Query,
     Controller,
     ParseIntPipe,
+    Delete,
+
 } from '@nestjs/common';
 
 import { PostService } from './post.service';
@@ -27,13 +29,14 @@ export class PostController {
     @Post()
     createPost(
         @Body() post: PostDto,
+        @User() user: { id: number },
 
     ): Promise<Posts> {
-        return this.postService.createPost(post);
+        return this.postService.createPost(post, user.id);
     }
 
     //get all posts
-    @Roles(ROLES.USER)
+    @Roles(ROLES.USER, ROLES.ADMIN)
     @Get()
     findAll(
         @Query('limit') limit: number,
@@ -43,26 +46,55 @@ export class PostController {
     }
 
     //get a post by id
-    @Roles(ROLES.USER)
+    @Roles(ROLES.USER, ROLES.ADMIN)
     @Get(':postId')
     async findOne(
         @Param('postId', ParseIntPipe) postId: number,
-        @User() user: { id: number },
     ): Promise<Posts> {
-        return await this.postService.getPostById(postId, user.id);
+        return await this.postService.getPostById(postId);
     }
-    //update a post
-    @Roles(ROLES.ADMIN)
-    @Put(':postId/comments')
-    createOrUpdateComment(
+
+
+    //get all posts by user
+    @Roles(ROLES.USER, ROLES.ADMIN)
+    @Get('user/:userId')
+    findAllByUser(
+        @Param('userId', ParseIntPipe) userId: number,
+    ): Promise<Posts[]> {
+        return this.postService.getAllPostsByUserId(userId);
+    }
+
+// update a post
+    @Roles(ROLES.USER, ROLES.ADMIN)
+    @Put(':postId')
+    updateOnePost(
         @Param('postId', ParseIntPipe) postId: number,
-        @User() user: { id: number },
-        @Body() comment: CommentDto,
-    ): Promise<CommentDto> {
-        return this.postService.createOrUpdateComment(postId, user.id, comment);
+        @Body() post: PostDto,
+    ): Promise<Posts> {
+        return this.postService.updatePost(postId, post);
     }
-    // create a comment
-    @Roles(ROLES.USER)
+ 
+    // delete a post
+    @Roles(ROLES.USER, ROLES.ADMIN)
+    @Delete(':postId')
+    deleteOnePost(
+        @Param('postId', ParseIntPipe) postId: number,
+    ): Promise<Posts> {
+        return this.postService.deletePost(postId);
+    }
+
+    // get all comments of a post
+    @Roles(ROLES.USER, ROLES.ADMIN)
+    @Get(':postId/comments')
+    findAllComments(
+        @Param('postId', ParseIntPipe) postId: number,
+    ): Promise<CommentDto[]> {
+        return this.postService.findAllComments(postId);
+    }
+
+ 
+    // create or update comment
+    @Roles(ROLES.USER, ROLES.ADMIN)
     @Post(':postId/comments')
     createComment(
         @Param('postId', ParseIntPipe) postId: number,

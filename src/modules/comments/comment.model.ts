@@ -46,18 +46,17 @@ export class Comments extends Model<Comments> {
   id: number;
 
   @ForeignKey(() => Users)
-  @Column(DataType.INTEGER)
+  @Column({ field: 'userId', type: DataType.INTEGER })
   userId: number;
 
   @ForeignKey(() => Posts)
-  @Column(DataType.INTEGER)
+  @Column({ field: 'postId', type: DataType.INTEGER })
   postId: number;
 
   @Column({ field: 'commentContent', type: DataType.STRING })
   commentContent: string;
 
-  @Column({ field: 'createdBy', type: DataType.STRING })
-  commentTime: Date;
+  
   
   @Column({ field: 'createdBy', type: DataType.STRING })
   createdBy: number;
@@ -85,12 +84,10 @@ export class Comments extends Model<Comments> {
     defaultValue: moment().format('YYYY-MM-DD HH:mm:ss')
   })
   deletedAt: Date;
-  // i want to put default value as new Date()  
 
   @Column({
     field: 'deletedBy',
     type: DataType.STRING,
-    defaultValue: moment().format('YYYY-MM-DD HH:mm:ss'),
   })
   deletedBy: string;
 

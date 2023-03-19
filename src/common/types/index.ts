@@ -15,7 +15,7 @@ export type POST = {
   post: {
     id: number;
     postContent: string;
-    isCommentedAt: boolean;
+    
   };
   comments: Comments[];
  
