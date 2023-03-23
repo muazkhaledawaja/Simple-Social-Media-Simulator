@@ -5,54 +5,57 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
 
-    await queryInterface.createTable('Users',
+    await queryInterface.createTable('Comments',
       {
         id: {
           type: Sequelize.INTEGER,
           primaryKey: true,
           autoIncrement: true,
         },
-        username: {
-          type: Sequelize.STRING,
+        postId: {
+          type: Sequelize.INTEGER,
           allowNull: false,
-          unique: true,
+          field: 'postId',
+          references: {
+            model: 'Posts',
+            key: 'id',
+          },
+
 
         },
-        email: {
-          type: Sequelize.STRING,
+        userId: {
+          type: Sequelize.INTEGER,
           allowNull: false,
-          unique: true,
+          references: {
+            model: 'Users',
+            key: 'id',
+          }
         },
-        password: {
-          type: Sequelize.STRING,
-          allowNull: false,
-        },
-        role:{
-          type: Sequelize.STRING,
-          allowNull: false,
-        },
-        createdAt: {
-          type: Sequelize.DATE,
-          allowNull: false,
-        },
-        updatedAt: {
-          type: Sequelize.DATE,
-          allowNull: false,
-        },
-        createdBy: {
-          type: Sequelize.STRING,
-        },
-        updatedBy: {
-          type: Sequelize.STRING,
-        },
-        deletedAt: {
-          type: Sequelize.DATE,
-        },
-        deletedBy: {
+        content: {
           type: Sequelize.STRING,
         },
 
-        
+
+        created_at: {
+          type: Sequelize.DATE,
+          allowNull: false,
+        },
+        updated_at: {
+          type: Sequelize.DATE,
+          allowNull: false,
+        },
+        created_by: {
+          type: Sequelize.STRING,
+        },
+        updated_by: {
+          type: Sequelize.STRING,
+        },
+        deleted_at: {
+          type: Sequelize.DATE,
+        },
+        deleted_by: {
+          type: Sequelize.STRING,
+        },
 
 
       });
@@ -61,7 +64,7 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
 
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('Comments');
 
   }
 };

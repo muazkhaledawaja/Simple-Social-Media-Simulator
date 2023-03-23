@@ -4,7 +4,6 @@ import {
     Put,
     Body,
     Post,
-    Param,
     Query,
     Controller,
     ParseIntPipe,
@@ -66,7 +65,7 @@ export class CommentController {
     deleteComment(
         @User('id') userId: number,
         @Query('postId', ParseIntPipe) postId: number,
-        @Param('commentId', ParseIntPipe) commentId: number
+     
     ) {
         return this.commentService.deleteComment(postId, userId);
     }

@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 
 import { Posts } from './post.model';
-import { Comments } from '../comments/comment.model';
 import { CommentService } from '../comments/comment.service';
 import { CommentDto } from '../comments/dto/comment.dto';
 import { PostDto } from './dto/post.dto';
@@ -189,7 +188,7 @@ export class PostService {
     }else{
       return "comment not found"
     }
-    
+
    
   }
 
@@ -203,6 +202,7 @@ export class PostService {
     await this.updataComment(postId, userId, comment)
     return comment
   }
+ 
 
 
 }

@@ -29,24 +29,24 @@ module.exports = {
         
 
 
-        createdAt: {
+        created_at: {
           type: Sequelize.DATE,
           allowNull: false,
         },
-        updatedAt: {
+        updated_at: {
           type: Sequelize.DATE,
           allowNull: false,
         },
-        createdBy: {
+        created_by: {
           type: Sequelize.STRING,
         },
-        updatedBy: {
+        updated_by: {
           type: Sequelize.STRING,
         },
-        deletedAt: {
+        deleted_at: {
           type: Sequelize.DATE,
         },
-        deletedBy: {
+        deleted_by: {
           type: Sequelize.STRING,
         },
 
