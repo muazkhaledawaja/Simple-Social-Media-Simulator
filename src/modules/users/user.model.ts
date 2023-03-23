@@ -108,5 +108,7 @@ export class Users extends Model<Users> {
 
   @HasMany(() => Comments)
   comments: Comments[];
+ 
+
 
 }

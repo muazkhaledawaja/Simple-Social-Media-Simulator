@@ -9,6 +9,7 @@ import {
   ForeignKey,
   Scopes,
   HasMany,
+  BelongsTo,
 
 } from 'sequelize-typescript';
 import * as moment from 'moment';
@@ -108,6 +109,8 @@ export class Posts extends Model<Posts> {
   @HasMany(() => Comments)
   comments: Comments[];
 
+  @BelongsTo(() => Users)
+  user: Users;
 
 
 }

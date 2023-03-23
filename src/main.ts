@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { NestFactory, Reflector } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
-
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 
 import { AppModule } from './app.module';
 import { AuthGuard, RolesGuard } from './common/guards';
@@ -19,6 +19,7 @@ async function bootstrap() {
   );
 
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+  app.useGlobalInterceptors(new LoggingInterceptor())
 
   await app.listen(3000);
 }

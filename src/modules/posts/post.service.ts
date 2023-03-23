@@ -13,6 +13,7 @@ import { CommentDto } from '../comments/dto/comment.dto';
 import { PostDto } from './dto/post.dto';
 
 import { ERRORS, PROVIDERS } from 'src/common/constants';
+import { Comments } from '../comments/comment.model';
 
 @Injectable()
 export class PostService {
@@ -137,6 +138,18 @@ export class PostService {
       });
       return posts;
  
+  }
+
+  // join post and comments
+  async findAllWithComments(): Promise<Posts[]> {
+    return await this.postRepository.findAll({
+      include: [
+        {
+          model: Comments,
+          as: 'comments',
+        },
+      ],
+    });
   }
 
 

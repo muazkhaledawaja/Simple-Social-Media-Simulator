@@ -8,6 +8,7 @@ import {
   ForeignKey,
   AutoIncrement,
   Scopes,
+  BelongsTo
 } from 'sequelize-typescript'
 
 import { Posts } from '../posts/post.model'
@@ -100,6 +101,13 @@ export class Comments extends Model<Comments> {
     type: DataType.STRING,
   })
   deleted_by: string;
+
+  @BelongsTo(() => Posts)
+  post: Posts;
+
+  @BelongsTo(() => Users)
+  user: Users;
+
 
 }
 
