@@ -61,7 +61,7 @@ export class UserService {
                 email: user.email,
                 username: user.username,
                 password: hashedPassword,
-       
+       role: user.role
             });
             delete newUser.password;
             return newUser 
@@ -99,6 +99,7 @@ export class UserService {
                     id: user.id,
                     email: user.email,
                     username: user.username,
+                    role: user.role
 
                 },
                 token: generateToken(user.username, user.id),

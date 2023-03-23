@@ -35,11 +35,12 @@ import { Comments } from 'src/modules/comments/comment.model';
     basic: {
       attributes: {
         exclude: [
-          'updatedAt',
-          'createdAt',
-          'updatedBy',
-          'createdBy',
-          'deletedAt',
+          'updated_at',
+          'updated_at',
+          'updated_by',
+          'created_by',
+          'deleted_at',
+          "deleted_by"
         ],
       },
     },
@@ -78,7 +79,7 @@ export class Users extends Model<Users> {
   updated_by: number;
 
   @Column({
-    field: 'created_at',
+    field: 'updated_at',
     type: DataType.STRING,
   })
   created_at: Date;
