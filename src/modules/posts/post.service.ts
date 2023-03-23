@@ -8,10 +8,9 @@ import {
 } from '@nestjs/common';
 
 import { Posts } from './post.model';
-import { POST } from 'src/common/types';
-
+import { Comments } from '../comments/comment.model';
 import { CommentService } from '../comments/comment.service';
-import { CommentDto } from './dto/comment.dto';
+import { CommentDto } from '../comments/dto/comment.dto';
 import { PostDto } from './dto/post.dto';
 
 import { ERRORS, PROVIDERS } from 'src/common/constants';
@@ -75,7 +74,7 @@ export class PostService {
   }
 
   //  find all comments for a post
-  async findAllComments(postId: number): Promise<CommentDto[]> {
+  async findAllComments(postId: number): Promise<any> {
     try {
       const post = await this.getPostById(postId);
       if (!post) {
@@ -91,19 +90,19 @@ export class PostService {
   // get a post by post id
   async getPostById(postId: number): Promise<Posts> {
     try {
-      const post=  this.postRepository.findOne({
-        where: {  id: postId },
+      const post = this.postRepository.findOne({
+        where: { id: postId },
       });
       if (!post) {
         throw new HttpException(ERRORS.POST_NOT_FOUND, 404);
       }
- 
+
       return post;
     } catch (error) {
       throw new InternalServerErrorException(error);
 
     }
- 
+
   }
 
   // Get all posts
@@ -123,7 +122,29 @@ export class PostService {
       throw new InternalServerErrorException(err);
     }
   }
- // get all posts by user id
+
+  // get all posts from database
+  async getAllPostsFromDb(): Promise<Posts[]> {
+    try {
+      const posts = await this.postRepository.findAll({
+        order: [
+          ['createdAt', 'DESC'],
+        ],
+      });
+      return posts;
+    } catch (err) {
+      throw new InternalServerErrorException(err);
+    }
+  }
+
+  //get all timeline posts
+  async getAllTimeLinePosts(): Promise<any> {
+    const posts = await this.postRepository.findAll()
+    return posts;
+
+  }
+
+  // get all posts by user id
   async getAllPostsByUserId(userId: number): Promise<Posts[]> {
     try {
       const posts = await this.postRepository.findAll({
@@ -140,7 +161,7 @@ export class PostService {
 
 
   // Find one post by with comments
-  async findPostWithComments(postId: number): Promise<POST> {
+  async findPostWithComments(postId: number): Promise<any> {
 
     try {
       // find post
@@ -156,28 +177,20 @@ export class PostService {
     }
   }
 
-  // update a comment if found or create it for a post
+  // update a comment if found or create it for a post useing upsert
   async updataComment(
     postId: number,
     userId: number,
     comment: CommentDto,
-  ): Promise<CommentDto> {
-    try {
-      const foundComment = await this.commentService.findOne(postId, userId,);
-      if (foundComment) {
-        await this.commentService.updateComment(
-          postId,
-          userId,
-          comment,
-
-        );
-      } else {
-        await this.commentService.createComment(postId, userId, comment);
-      }
-      return comment;
-    } catch (err) {
-      throw new InternalServerErrorException(err);
+  ): Promise<any> {
+    const foundComment = await this.commentService.findCommentsByUser(postId, userId)
+    if (foundComment) {
+      await this.commentService.updateComment(postId, userId, comment)
+    }else{
+      return "comment not found"
     }
+    
+   
   }
 
   // create or update comment on post

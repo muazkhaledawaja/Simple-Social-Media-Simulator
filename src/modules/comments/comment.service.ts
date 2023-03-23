@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { CommentDto } from 'src/modules/posts/dto/comment.dto';
+import { CommentDto } from 'src/modules/comments/dto/comment.dto';
 import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { PROVIDERS, ERRORS } from 'src/common/constants';
 import { Comments } from './comment.model';
@@ -23,13 +23,14 @@ export class CommentService {
     }
 
     // find a comment by user id 
-    async findOne(postId: number, userId: number): Promise<Comments> {
-        const comment = await this.commentRepository.findOne({
+    async findCommentsByUser(postId: number, userId: number): Promise<Comments[]> {
+        const comment = await this.commentRepository.findAll({
             where: { postId, userId },
 
         })
         return comment;
     }
+
 
     // create a comment for a post
     async createComment(
@@ -42,8 +43,8 @@ export class CommentService {
             ...commentDto,
             postId,
             userId,
-            createdBy: userId,
-            updatedBy: userId,
+            created_by: userId,
+            updated_by: userId,
         })
         return comment;
     }
@@ -55,15 +56,24 @@ export class CommentService {
         commentDto: CommentDto
     ): Promise<void> {
 
-        await this, this.commentRepository.update({
+        await this, this.commentRepository.upsert({
             ...commentDto,
             postId,
             userId,
-            updatedBy: userId
+            updated_by: userId
 
-        },
-            {
-                where: { postId, userId }
-            })}
+        }
+        )
+    }
+
+    // delete a comment for a post
+    async deleteComment(postId: number, userId: number): Promise<string> {
+
+        const comment = await this.commentRepository.destroy({
+            where: { postId, userId, }
+        })
+        return 'Comment deleted successfully'
+
+    }
 
 }

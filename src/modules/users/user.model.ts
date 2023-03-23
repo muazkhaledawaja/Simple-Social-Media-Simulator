@@ -66,38 +66,41 @@ export class Users extends Model<Users> {
   @Column(DataType.STRING)
   email: string;
 
-  @Column({ field: 'createdBy', type: DataType.STRING })
-  createdBy: string;
-
-  @Column({ field: 'updatedBy', type: DataType.STRING })
-  updatedBy: string;
-
-  @Column({
-    field: 'createdAt',
-    type: DataType.STRING,
-    defaultValue: moment().format('YYYY-MM-DD HH:mm:ss')
-  })
-  createdAt: Date;
+  @Column({ 
+    field: 'created_by', 
+    type: DataType.INTEGER })
+  created_by: number;
 
   @Column({
-    field: 'updatedAt',
-    type: DataType.STRING,
-    defaultValue: moment().format('YYYY-MM-DD HH:mm:ss')
-  })
-  updatedAt: Date;
+     field: 'updated_by',
+      type: DataType.INTEGER 
+    })
+  updated_by: number;
 
   @Column({
-    field: 'deletedAt',
+    field: 'created_at',
     type: DataType.STRING,
-    defaultValue: moment().format('YYYY-MM-DD HH:mm:ss')
   })
-  deletedAt: Date;
+  created_at: Date;
 
   @Column({
-    field: 'deletedBy',
+    field: 'updated_at',
     type: DataType.STRING,
   })
-  deletedBy: string;
+  updated_at: Date;
+
+  @Column({
+    field: 'deleted_at',
+    type: DataType.STRING,
+  })
+  deleted_at: Date;
+
+
+  @Column({
+    field: 'deleted_by',
+    type: DataType.STRING,
+  })
+  deleted_by: string;
 
   @HasMany(() => Posts)
   posts: Posts[];

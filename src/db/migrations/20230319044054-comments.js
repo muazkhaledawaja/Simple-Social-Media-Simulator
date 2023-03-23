@@ -5,14 +5,23 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
 
-
-
-    await queryInterface.createTable('Posts',
+    await queryInterface.createTable('Comments',
       {
         id: {
           type: Sequelize.INTEGER,
           primaryKey: true,
           autoIncrement: true,
+        },
+        postId: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          field: 'postId' ,
+          references: {
+            model: 'Posts',
+            key: 'id',
+          },
+   
+
         },
         userId: {
           type: Sequelize.INTEGER,
@@ -22,10 +31,11 @@ module.exports = {
             key: 'id',
           }
         },
-        postContent: {
+        content: {
           type: Sequelize.STRING,
-          allowNull: false,
         },
+
+ 
         createdAt: {
           type: Sequelize.DATE,
           allowNull: false,
@@ -47,14 +57,14 @@ module.exports = {
           type: Sequelize.STRING,
         },
 
+
       });
 
   },
 
   async down(queryInterface, Sequelize) {
 
-
-    await queryInterface.dropTable('Posts');
+    await queryInterface.dropTable('Comments');
 
   }
 };

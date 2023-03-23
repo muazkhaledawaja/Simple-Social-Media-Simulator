@@ -35,7 +35,7 @@ export class UserService {
         const where: any = {};
         if (userNameOrEmail.email) {
             where.email = userNameOrEmail.email;
-        } else if (userNameOrEmail.username) {
+        } if (userNameOrEmail.username) {
             where.userName = userNameOrEmail.username;
         }
         return this.usersRepository.findOne({
@@ -46,7 +46,7 @@ export class UserService {
         })
     }
     //function to create new user
-    async signup(user: SignupDto): Promise<User | null> {
+    async signup(user: SignupDto): Promise<User | any> {
         try {
             // check if user already exists
             const checkUserWithEmailOrUsername = await this.getUser({
@@ -58,7 +58,7 @@ export class UserService {
             }
 
             // hash password
-            const hashedPassword = await bcrypt.hash(user.password, 10);
+            const hashedPassword = await bcrypt.hashSync(user.password, 10);
             // create user
             const newUser = await this.usersRepository.create({
                 email: user.email,
@@ -66,17 +66,11 @@ export class UserService {
                 password: hashedPassword,
                 role: user.role,
             });
-            return {
-                user: {
-                    id: newUser.id,
-                    role: newUser.role,
-                    email: newUser.email,
-                    username: newUser.username,
-                }
-            }
+            delete newUser.password;
+            return newUser 
 
         } catch (error) {
-            throw new InternalServerErrorException(error)
+            throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR)
 
         }
     }
@@ -84,8 +78,6 @@ export class UserService {
     async login(loginDetails: LoginDto): Promise<any> {
         try {
             // check if user exists
-            console.log(loginDetails);
-            
             const user = await this.usersRepository.findOne({
                 where:
                 {
@@ -93,7 +85,6 @@ export class UserService {
                     email: loginDetails.email,
                 },
             }
-
             );
             if (!user) {
                 throw new HttpException(ERRORS.User_NOT_FOUND, HttpStatus.NOT_FOUND);

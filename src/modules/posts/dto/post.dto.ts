@@ -6,6 +6,6 @@ import { IsNotEmpty, IsString } from "class-validator";
 export class PostDto {
   @IsNotEmpty()
   @IsString()
-  readonly postContent: string;
+  readonly content: string;
 
 }

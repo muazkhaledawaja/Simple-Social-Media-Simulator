@@ -14,7 +14,7 @@ import {
 
 import { PostService } from './post.service';
 import { PostDto } from './dto/post.dto';
-import { CommentDto } from './dto/comment.dto';
+import { CommentDto } from '../comments/dto/comment.dto';
 import { Posts } from './post.model';
 import { Roles, User } from 'src/common/decorators';
 import { ROLES } from 'src/common/enum';
@@ -45,6 +45,14 @@ export class PostController {
         return this.postService.getAllPosts(limit, offset);
     }
 
+    // get all posts from different users
+    @Roles(ROLES.USER, ROLES.ADMIN)
+    @Get('all')
+    findAllPosts(
+    ): Promise<Posts[]> {
+        return this.postService.getAllTimeLinePosts();
+    }
+
     //get a post by id
     @Roles(ROLES.USER, ROLES.ADMIN)
     @Get(':postId')
@@ -64,7 +72,7 @@ export class PostController {
         return this.postService.getAllPostsByUserId(userId);
     }
 
-// update a post
+    // update a post
     @Roles(ROLES.USER, ROLES.ADMIN)
     @Put(':postId')
     updateOnePost(
@@ -73,7 +81,7 @@ export class PostController {
     ): Promise<Posts> {
         return this.postService.updatePost(postId, post);
     }
- 
+
     // delete a post
     @Roles(ROLES.USER, ROLES.ADMIN)
     @Delete(':postId')
@@ -92,7 +100,7 @@ export class PostController {
         return this.postService.findAllComments(postId);
     }
 
- 
+
     // create or update comment
     @Roles(ROLES.USER, ROLES.ADMIN)
     @Post(':postId/comments')

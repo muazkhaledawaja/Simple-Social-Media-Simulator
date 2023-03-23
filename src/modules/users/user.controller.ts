@@ -7,13 +7,7 @@ import { Public } from "src/common/decorators/public.deco";
 @Controller()
 export class UserController {
     constructor(private readonly userService: UserService) { }
-
-    // 
-    @Get('test')
-    async test() {
-        return await this.userService.getAllUsers();
-
-    }
+ 
 
     @Public()
     @Post('signup')

@@ -15,15 +15,15 @@ import { Users } from '../users/user.model'
 import * as moment from 'moment';
 
 
- 
+
 @Table({
   tableName: 'comments',
   timestamps: true,
   paranoid: true,
   underscored: true,
- 
+
 })
- 
+
 @Scopes(() => {
   return {
     basic: {
@@ -53,43 +53,47 @@ export class Comments extends Model<Comments> {
   @Column({ field: 'postId', type: DataType.INTEGER })
   postId: number;
 
-  @Column({ field: 'commentContent', type: DataType.STRING })
-  commentContent: string;
+  @Column({ field: 'content', type: DataType.STRING })
+  content: string;
 
-  
-  
-  @Column({ field: 'createdBy', type: DataType.STRING })
-  createdBy: number;
 
-  @Column({ field: 'updatedBy', type: DataType.STRING })
-  updatedBy: number;
 
   @Column({
-    field: 'createdAt',
-    type: DataType.STRING,
-    defaultValue: moment().format('YYYY-MM-DD HH:mm:ss')
+    field: 'created_by',
+    type: DataType.INTEGER
   })
-  createdAt: Date;
+  created_by: number;
 
   @Column({
-    field: 'updatedAt',
-    type: DataType.STRING,
-    defaultValue: moment().format('YYYY-MM-DD HH:mm:ss')
+    field: 'updated_by',
+    type: DataType.INTEGER
   })
-  updatedAt: Date;
+  updated_by: number;
 
   @Column({
-    field: 'deletedAt',
+    field: 'created_at',
     type: DataType.STRING,
-    defaultValue: moment().format('YYYY-MM-DD HH:mm:ss')
   })
-  deletedAt: Date;
+  created_at: Date;
 
   @Column({
-    field: 'deletedBy',
+    field: 'updated_at',
     type: DataType.STRING,
   })
-  deletedBy: string;
+  updated_at: Date;
+
+  @Column({
+    field: 'deleted_at',
+    type: DataType.STRING,
+  })
+  deleted_at: Date;
+
+
+  @Column({
+    field: 'deleted_by',
+    type: DataType.STRING,
+  })
+  deleted_by: string;
 
 }
 
