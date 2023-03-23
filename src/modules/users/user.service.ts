@@ -23,14 +23,11 @@ export class UserService {
         private readonly usersRepository: typeof Users,
     ) { }
 
-    async getAllUsers(): Promise<Users[]> {
-        return this.usersRepository.findAll({
-        });
-    }
+  
     //function to check if user already exists
     async getUser(userNameOrEmail: {
-        email?: string;
-        username?: string;
+        email: string;
+        username: string;
     }): Promise<Users> {
         const where: any = {};
         if (userNameOrEmail.email) {
