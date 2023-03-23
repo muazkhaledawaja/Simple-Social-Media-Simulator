@@ -24,71 +24,61 @@ export class PostService {
 
   // Create a post
   async createPost(post: PostDto, userId: number): Promise<Posts> {
-    try {
+  
       const newPost = await this.postRepository.create<Posts>({
         ...post,
         userId,
       });
       return newPost;
-    } catch (err) {
-      throw new InternalServerErrorException(err);
-    }
+
   }
 
   //edit post
   async updatePost(postId: number, post: PostDto): Promise<Posts> {
-    try {
+
       const foundPost = await this.getPostById(postId);
       if (!foundPost) {
         throw new HttpException(ERRORS.POST_NOT_FOUND, 404);
       }
       await this.postRepository.update(post, { where: { id: postId } });
       return foundPost;
-    } catch (err) {
-      throw new InternalServerErrorException(err);
-    }
+   
   }
 
   // delete a post
   async deletePost(postId: number): Promise<Posts> {
-    try {
+   
       const post = await this.getPostById(postId);
       if (!post) {
         throw new HttpException(ERRORS.POST_NOT_FOUND, 404);
       }
       await this.postRepository.destroy({ where: { id: postId } });
       return post;
-    } catch (err) {
-      throw new InternalServerErrorException(err);
-    }
+  
   }
 
   // delete all posts
   async deleteAllPosts(): Promise<void> {
-    try {
+   
       await this.postRepository.destroy({ where: {} });
-    } catch (err) {
-      throw new InternalServerErrorException(err);
-    }
+  
   }
 
   //  find all comments for a post
   async findAllComments(postId: number): Promise<any> {
-    try {
+    
       const post = await this.getPostById(postId);
       if (!post) {
         throw new HttpException(ERRORS.POST_NOT_FOUND, 404);
       }
       const comments = await this.commentService.findAllComments(postId);
       return comments;
-    } catch (err) {
-      throw new InternalServerErrorException(err);
-    }
+ 
   }
 
   // get a post by post id
   async getPostById(postId: number): Promise<Posts> {
-    try {
+    
       const post = this.postRepository.findOne({
         where: { id: postId },
       });
@@ -97,16 +87,13 @@ export class PostService {
       }
 
       return post;
-    } catch (error) {
-      throw new InternalServerErrorException(error);
-
-    }
+  
 
   }
 
   // Get all posts
   async getAllPosts(limit: number, offset: number): Promise<Posts[]> {
-    try {
+
       const posts = await this.postRepository.findAll({
         limit: limit || 10,
         offset: offset || 0,
@@ -117,23 +104,19 @@ export class PostService {
 
       })
       return posts;
-    } catch (err) {
-      throw new InternalServerErrorException(err);
-    }
+   
   }
 
   // get all posts from database
   async getAllPostsFromDb(): Promise<Posts[]> {
-    try {
+    
       const posts = await this.postRepository.findAll({
         order: [
           ['createdAt', 'DESC'],
         ],
       });
       return posts;
-    } catch (err) {
-      throw new InternalServerErrorException(err);
-    }
+  
   }
 
   //get all timeline posts
@@ -145,7 +128,7 @@ export class PostService {
 
   // get all posts by user id
   async getAllPostsByUserId(userId: number): Promise<Posts[]> {
-    try {
+   
       const posts = await this.postRepository.findAll({
         where: { userId },
         order: [
@@ -153,16 +136,14 @@ export class PostService {
         ],
       });
       return posts;
-    } catch (err) {
-      throw new InternalServerErrorException(err);
-    }
+ 
   }
 
 
   // Find one post by with comments
   async findPostWithComments(postId: number): Promise<any> {
 
-    try {
+   
       // find post
       const post = await this.getPostById(postId);
       if (!post) {
@@ -171,9 +152,7 @@ export class PostService {
       // find comments
       const comments = await this.commentService.findAllComments(postId);
       return { post, comments };
-    } catch (err) {
-      throw new InternalServerErrorException(err);
-    }
+   
   }
 
   // update a comment if found or create it for a post useing upsert
