@@ -5,7 +5,6 @@ import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { AuthGuard, RolesGuard } from './common/guards';
 import { UserService } from './modules/users/user.service';
-import { PaginationInterceptor } from './common/interceptors/pagination.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,8 +18,8 @@ async function bootstrap() {
   );
 
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
-  app.useGlobalInterceptors(new PaginationInterceptor());
 
   await app.listen(3000);
 }
 bootstrap();
+//test origin

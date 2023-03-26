@@ -10,8 +10,7 @@ import {
 import { SignupDto, LoginDto } from './dto';
 import { User } from 'src/common/types';
 import { ERRORS, PROVIDERS } from 'src/common/constants';
-import { generateToken, comparePassword } from 'src/common/utils';
-import * as bcrypt from 'bcrypt';
+import { generateToken, comparePassword ,hashPassword } from 'src/common/utils';
 
 
 import { Users } from './user.model';
@@ -25,7 +24,7 @@ export class UserService {
 
   
     //function to check if user already exists
-    async getUser(userNameOrEmail: {
+    async checkUser(userNameOrEmail: {
         email: string;
         username: string;
     }): Promise<Users> {
@@ -46,7 +45,7 @@ export class UserService {
     async signup(user: SignupDto): Promise<User | any> {
         try {
             // check if user already exists
-            const checkUserWithEmailOrUsername = await this.getUser({
+            const checkUserWithEmailOrUsername = await this.checkUser({
                 email: user.email,
                 username: user.username,
             });
@@ -55,7 +54,7 @@ export class UserService {
             }
 
             // hash password
-            const hashedPassword = await bcrypt.hashSync(user.password, 10);
+            const hashedPassword = await hashPassword(user.password, 10);
             // create user
             const newUser = await this.usersRepository.create({
                 email: user.email,
@@ -84,7 +83,7 @@ export class UserService {
             }
             );
             if (!user) {
-                throw new HttpException(ERRORS.User_NOT_FOUND, HttpStatus.NOT_FOUND);
+                throw new HttpException(ERRORS.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
             // check if password is correct
             const isPasswordCorrect = await comparePassword(

@@ -28,7 +28,7 @@ export class AuthGuard implements CanActivate {
         if (!decoded) return false;
 
 
-        const userCheck = await this.userService.getUser({
+        const userCheck = await this.userService.checkUser({
             username: decoded.username,
             email: decoded.email
         })
