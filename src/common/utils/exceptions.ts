@@ -7,7 +7,7 @@ const EXCEPTIONS = {
     throw new HttpException(
       {
         status: HttpStatus.BAD_REQUEST,
-        error: ERRORS.User_NOT_FOUND,
+        error: ERRORS.USER_NOT_FOUND,
       },
       HttpStatus.BAD_REQUEST,
     );

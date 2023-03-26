@@ -11,7 +11,7 @@ export type User = {
   };
 };
 
-export type POST = {
+export type Post = {
   post: {
     id: number;
     postContent: string;
