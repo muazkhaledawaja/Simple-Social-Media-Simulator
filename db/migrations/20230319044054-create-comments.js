@@ -39,6 +39,7 @@ module.exports = {
         created_at: {
           type: Sequelize.DATE,
           allowNull: false,
+          
         },
         updated_at: {
           type: Sequelize.DATE,
@@ -46,15 +47,19 @@ module.exports = {
         },
         created_by: {
           type: Sequelize.STRING,
+ 
         },
         updated_by: {
-          type: Sequelize.STRING,
+          type: Sequelize.INTEGER,
+   
         },
         deleted_at: {
           type: Sequelize.DATE,
+       
         },
         deleted_by: {
           type: Sequelize.STRING,
+       
         },
 
 

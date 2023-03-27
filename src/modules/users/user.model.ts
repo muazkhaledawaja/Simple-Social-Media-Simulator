@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-import * as moment from 'moment';
 
 import {
   Model,
@@ -35,12 +34,12 @@ import { Comments } from 'src/modules/comments/comment.model';
     basic: {
       attributes: {
         exclude: [
-          'updated_at',
-          'updated_at',
           'updated_by',
           'created_by',
           'deleted_at',
-          "deleted_by"
+          "deleted_by",
+          "created_at",
+          "updated_at"
         ],
       },
     },
@@ -67,35 +66,35 @@ export class Users extends Model<Users> {
   @Column(DataType.STRING)
   email: string;
 
-  @Column({ 
-    field: 'created_by', 
-    type: DataType.INTEGER })
+  @Column({
+    field: 'created_by',
+    type: DataType.INTEGER
+  })
   created_by: number;
 
   @Column({
-     field: 'updated_by',
-      type: DataType.INTEGER 
-    })
+    field: 'updated_by',
+    type: DataType.INTEGER
+  })
   updated_by: number;
 
   @Column({
-    field: 'updated_at',
-    type: DataType.STRING,
+    field: 'created_at',
+    type: DataType.DATE
   })
   created_at: Date;
 
   @Column({
     field: 'updated_at',
-    type: DataType.STRING,
+    type: DataType.DATE,
   })
   updated_at: Date;
 
   @Column({
     field: 'deleted_at',
-    type: DataType.STRING,
+    type: DataType.DATE,
   })
   deleted_at: Date;
-
 
   @Column({
     field: 'deleted_by',
@@ -108,7 +107,4 @@ export class Users extends Model<Users> {
 
   @HasMany(() => Comments)
   comments: Comments[];
- 
-
-
 }
