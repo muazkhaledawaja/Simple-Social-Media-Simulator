@@ -13,7 +13,6 @@ import {
 
 import { Posts } from '../posts/post.model'
 import { Users } from '../users/user.model'
-import * as moment from 'moment';
 
 
 
@@ -24,23 +23,17 @@ import * as moment from 'moment';
   underscored: true,
 
 })
-
 @Scopes(() => {
   return {
-    no_password: {
-      attributes: {
-        exclude: ['password'],
-      },
-    },
     basic: {
       attributes: {
         exclude: [
           'updated_at',
-          'updated_at',
           'updated_by',
           'created_by',
           'deleted_at',
-          "deleted_by"
+          "deleted_by",
+          "created_at",
         ],
       },
     },
@@ -70,7 +63,6 @@ export class Comments extends Model<Comments> {
     type: DataType.INTEGER
   })
   created_by: number;
-
   @Column({
     field: 'updated_by',
     type: DataType.INTEGER

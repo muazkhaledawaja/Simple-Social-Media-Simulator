@@ -18,7 +18,6 @@ export const databaseProviders = [
         ...configService.get('database'),
       });
       sequelize.addModels([Users, Posts, Comments]);
-      console.log(sequelize.models);
       return sequelize;
     },
   },
