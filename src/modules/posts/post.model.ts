@@ -63,35 +63,38 @@ export class Posts extends Model<Posts> {
   content: string;
 
 
-  @Column({
-    field: 'created_by',
+ @Column({
     type: DataType.INTEGER
   })
-  created_by: string;
+  createdBy: number;
 
   @Column({
-    field: 'updated_by',
     type: DataType.INTEGER
   })
-  updated_by: number;
+  updatedBy: number;
 
   @Column({
-    field: 'created_at',
-    type: DataType.STRING,
+    type: DataType.DATE
   })
-  created_at: Date;
+  createdAt: Date;
 
   @Column({
     field: 'updated_at',
-    type: DataType.STRING,
+    type: DataType.DATE,
   })
-  updated_at: Date;
+  updatedAt: Date;
 
   @Column({
     field: 'deleted_at',
+    type: DataType.DATE,
+  })
+  deletedAt: Date;
+
+  @Column({
+    field: 'deleted_by',
     type: DataType.STRING,
   })
-  deleted_at: Date;
+  deletedBy: string;
 
 
   @Column({

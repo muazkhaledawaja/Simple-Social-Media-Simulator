@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { PROVIDERS } from 'src/common/constants';
+import { PROVIDERS } from '../../common/constants';
 
 import { Comments } from './comment.model';
 

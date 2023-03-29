@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { ERRORS } from 'src/common/constants';
-import { ROLES } from 'src/common/enum';
+import { ERRORS } from '../../../common/constants';
+import { ROLES } from '../../../common/enum';
 import {
     IsEnum,
     Matches,

@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { Users } from 'src/modules/users/user.model';
+import { Users } from '../../modules/users/user.model';
  
 
 export const User = createParamDecorator(

@@ -16,8 +16,8 @@ import { PostService } from './post.service';
 import { PostDto } from './dto/post.dto';
 import { CommentDto } from '../comments/dto/comment.dto';
 import { Posts } from './post.model';
-import { Roles, User } from 'src/common/decorators';
-import { ROLES } from 'src/common/enum';
+import { Roles, User } from '../../common/decorators';
+import { ROLES } from '../../common/enum';
 
 @Controller('posts')
 export class PostController {

@@ -6,8 +6,9 @@ import { UserModule } from './modules/users/user.module';
 import { CommentModule } from './modules/comments/comment.module';
 import { DatabaseModule } from './modules/database/database.module';
 import { PostModule } from './modules/posts/post.module';
+import { FriendRequestModule } from './modules/friend-request/friend-request.module';
 
-import config from 'config';
+import config from '../config';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import config from 'config';
     CommentModule,
     DatabaseModule,
     PostModule,
+    FriendRequestModule,
     ConfigModule.forRoot({
       load: [config],
       isGlobal: true,

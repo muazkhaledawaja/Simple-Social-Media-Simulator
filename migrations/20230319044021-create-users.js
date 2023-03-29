@@ -27,7 +27,7 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull: false,
         },
-        role:{
+        role: {
           type: Sequelize.STRING,
           allowNull: false,
         },
@@ -38,12 +38,14 @@ module.exports = {
         updated_by: {
           type: Sequelize.INTEGER,
           allowNull: false,
+          defaultValue: 1,
         },
         created_by: {
           type: Sequelize.STRING,
         },
         updated_at: {
-          type: Sequelize.STRING,
+          type: Sequelize.DATE,
+          defaultValue: new Date()
         },
         deleted_at: {
           type: Sequelize.DATE,
@@ -51,17 +53,10 @@ module.exports = {
         deleted_by: {
           type: Sequelize.STRING,
         },
-
-        
-
-
       });
-
   },
 
   async down(queryInterface, Sequelize) {
-
     await queryInterface.dropTable('Users');
-
   }
 };

@@ -12,7 +12,7 @@ import { CommentService } from '../comments/comment.service';
 import { CommentDto } from '../comments/dto/comment.dto';
 import { PostDto } from './dto/post.dto';
 
-import { ERRORS, PROVIDERS } from 'src/common/constants';
+import { ERRORS, PROVIDERS } from '../../common/constants';
 import { Comments } from '../comments/comment.model';
 
 @Injectable()

@@ -8,12 +8,13 @@ import {
     Controller,
     ParseIntPipe,
     Delete,
+    Param,
 } from '@nestjs/common';
 
 import { CommentService } from './comment.service';
 import { CommentDto } from './dto/comment.dto';
-import { ROLES } from 'src/common/enum';
-import { Roles, User } from 'src/common/decorators';
+import { ROLES } from '../../common/enum';
+import { Roles, User } from '../../common/decorators';
 
 
 @Controller('comments')
@@ -23,7 +24,7 @@ export class CommentController {
     // get all comments for a post
     @Get()
     findAllComments(
-        @Query('postId', ParseIntPipe) postId: number
+        @Param('postId', ParseIntPipe) postId: number
     ) {
         return this.commentService.findAllComments(postId);
     }
@@ -42,7 +43,7 @@ export class CommentController {
     @Roles(ROLES.USER)
     createComment(
         @User('id') userId: number,
-        @Query('postId', ParseIntPipe) postId: number,
+        @Param('postId', ParseIntPipe) postId: number,
         @Body() commentDto: CommentDto
     ) {
         return this.commentService.createComment(postId, userId, commentDto);
@@ -53,7 +54,7 @@ export class CommentController {
     @Roles(ROLES.USER)
     updateComment(
         @User('id') userId: number,
-        @Query('postId', ParseIntPipe) postId: number,
+        @Param('postId', ParseIntPipe) postId: number,
         @Body() commentDto: CommentDto
     ) {
         return this.commentService.updateComment(postId, userId, commentDto);
@@ -64,7 +65,7 @@ export class CommentController {
     @Roles(ROLES.USER)
     deleteComment(
         @User('id') userId: number,
-        @Query('postId', ParseIntPipe) postId: number,
+        @Param('postId', ParseIntPipe) postId: number,
      
     ) {
         return this.commentService.deleteComment(postId, userId);

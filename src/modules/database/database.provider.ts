@@ -3,9 +3,10 @@
 // import { PROVIDERS, CONFIG } from "src/common/constants";
 import { Sequelize } from "sequelize-typescript";
 import { ConfigService } from "@nestjs/config";
-import { Users } from "src/modules/users/user.model";
-import { Posts } from "src/modules/posts/post.model";
-import { Comments } from "src/modules/comments/comment.model";
+import { Users } from "../../modules/users/user.model";
+import { Posts } from "../../modules/posts/post.model";
+import { Comments } from "../../modules/comments/comment.model";
+import { FriendRequest } from "../../modules/friend-request/friend-request.model";
 
 
 
@@ -17,7 +18,7 @@ export const databaseProviders = [
       const sequelize = new Sequelize({
         ...configService.get('database'),
       });
-      sequelize.addModels([Users, Posts, Comments]);
+      sequelize.addModels([Users, Posts, Comments,FriendRequest]);
       return sequelize;
     },
   },

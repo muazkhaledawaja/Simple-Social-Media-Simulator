@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Comments } from 'src/modules/comments/comment.model';
+import { Comments } from '../../modules/comments/comment.model';
 import { ROLES } from '../enum';
 
 export type User = {

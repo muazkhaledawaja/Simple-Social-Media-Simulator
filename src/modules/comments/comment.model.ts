@@ -57,42 +57,38 @@ export class Comments extends Model<Comments> {
   content: string;
 
 
-
   @Column({
-    field: 'created_by',
     type: DataType.INTEGER
   })
-  created_by: number;
-  @Column({
-    field: 'updated_by',
-    type: DataType.INTEGER
-  })
-  updated_by: number;
+  createdBy: number;
 
   @Column({
-    field: 'created_at',
-    type: DataType.STRING,
+    type: DataType.INTEGER
   })
-  created_at: Date;
+  updatedBy: number;
+
+  @Column({
+    type: DataType.DATE
+  })
+  createdAt: Date;
 
   @Column({
     field: 'updated_at',
-    type: DataType.STRING,
+    type: DataType.DATE,
   })
-  updated_at: Date;
+  updatedAt: Date;
 
   @Column({
     field: 'deleted_at',
-    type: DataType.STRING,
+    type: DataType.DATE,
   })
-  deleted_at: Date;
-
+  deletedAt: Date;
 
   @Column({
     field: 'deleted_by',
     type: DataType.STRING,
   })
-  deleted_by: string;
+  deletedBy: string;
 
   @BelongsTo(() => Posts)
   post: Posts;

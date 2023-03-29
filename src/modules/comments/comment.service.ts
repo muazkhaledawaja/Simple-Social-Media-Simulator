@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { CommentDto } from 'src/modules/comments/dto/comment.dto';
+import { CommentDto } from '../../modules/comments/dto/comment.dto';
 import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { PROVIDERS, ERRORS } from 'src/common/constants';
+import { PROVIDERS, ERRORS } from '../../common/constants';
 import { Comments } from './comment.model';
 
 @Injectable()
@@ -43,8 +43,8 @@ export class CommentService {
             ...commentDto,
             postId,
             userId,
-            created_by: userId,
-            updated_by: userId,
+            createdBy: userId,
+            updatedBy: userId,
         })
         return comment;
     }
@@ -60,7 +60,7 @@ export class CommentService {
             ...commentDto,
             postId,
             userId,
-            updated_by: userId
+            updatedBy: userId
 
         }
         )
@@ -72,7 +72,7 @@ export class CommentService {
         const comment = await this.commentRepository.destroy({
             where: { postId, userId, }
         })
-        return 'Comment deleted successfully'
+        return `this ${comment}Comment deleted successfully`
 
     }
 

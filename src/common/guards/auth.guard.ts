@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { UserService } from 'src/modules/users/user.service';
-import { verifyToken } from 'src/common/utils';
+import { UserService } from '../../modules/users/user.service';
+import { verifyToken } from '../../common/utils';
 import { SYSTEM } from '../constants/general';
 import { Reflector } from '@nestjs/core';
 

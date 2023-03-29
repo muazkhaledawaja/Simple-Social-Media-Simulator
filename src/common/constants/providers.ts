@@ -4,5 +4,6 @@ export const PROVIDERS = {
     USERS_PROVIDER: 'usersProvider',
     POSTS_PROVIDER: 'postsProvider',
     COMMENTS_PROVIDER: 'commentsProvider',
+    FRIEND_REQUEST_PROVIDER: 'friendRequestProvider',
   };
   

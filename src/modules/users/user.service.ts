@@ -8,9 +8,9 @@ import {
 } from '@nestjs/common';
 
 import { SignupDto, LoginDto } from './dto';
-import { User } from 'src/common/types';
-import { ERRORS, PROVIDERS } from 'src/common/constants';
-import { generateToken, comparePassword ,hashPassword } from 'src/common/utils';
+import { User } from '../../common/types';
+import { ERRORS, PROVIDERS } from '../../common/constants';
+import { generateToken, comparePassword ,hashPassword } from '../../common/utils';
 
 
 import { Users } from './user.model';
@@ -35,10 +35,7 @@ export class UserService {
             where.userName = userNameOrEmail.username;
         }
         return this.usersRepository.findOne({
-            where: {
-                ...where,
-
-            }
+            where
         })
     }
     //function to create new user
@@ -99,7 +96,7 @@ export class UserService {
                     email: user.email,
                     username: user.username,
                     role: user.role
-
+                    
                 },
                 token: generateToken(user.username, user.id),
             };

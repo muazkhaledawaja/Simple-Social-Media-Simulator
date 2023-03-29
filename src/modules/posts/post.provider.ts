@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Posts } from './post.model';
 
-import { PROVIDERS } from 'src/common/constants';
+import { PROVIDERS } from '../../common/constants';
 
 export const postProvider = [
   {

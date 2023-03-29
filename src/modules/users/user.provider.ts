@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Users } from './user.model';
 
-import { PROVIDERS } from 'src/common/constants';
+import { PROVIDERS } from '../../common/constants';
 
 export const userProvider = [
   {

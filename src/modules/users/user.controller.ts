@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Body, Get } from "@nestjs/common";
+import { Controller, Post, Body } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { SignupDto, LoginDto } from "./dto";
-import { Public } from "src/common/decorators/public.deco";
+import { Public } from "../../common/decorators/public.deco";
 
 @Controller()
 export class UserController {

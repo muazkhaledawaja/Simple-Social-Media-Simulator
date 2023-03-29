@@ -11,9 +11,9 @@ import {
   HasMany,
   Scopes
 } from 'sequelize-typescript';
-import { ROLES } from 'src/common/enum';
+import { ROLES } from '../../common/enum/index';
 import { Posts } from '../posts/post.model';
-import { Comments } from 'src/modules/comments/comment.model';
+import { Comments } from '../comments/comment.model';
 
 
 @Table({
@@ -67,40 +67,39 @@ export class Users extends Model<Users> {
   email: string;
 
   @Column({
-    field: 'created_by',
     type: DataType.INTEGER
+
   })
-  created_by: number;
+  createdBy: number;
 
   @Column({
-    field: 'updated_by',
     type: DataType.INTEGER
   })
-  updated_by: number;
+  updatedBy: number;
 
   @Column({
-    field: 'created_at',
     type: DataType.DATE
+    
   })
-  created_at: Date;
+  createdAt: Date;
 
   @Column({
     field: 'updated_at',
     type: DataType.DATE,
   })
-  updated_at: Date;
+  updatedAt: Date;
 
   @Column({
     field: 'deleted_at',
     type: DataType.DATE,
   })
-  deleted_at: Date;
+  deletedAt: Date;
 
   @Column({
     field: 'deleted_by',
     type: DataType.STRING,
   })
-  deleted_by: string;
+  deletedBy: string;
 
   @HasMany(() => Posts)
   posts: Posts[];

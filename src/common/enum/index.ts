@@ -4,3 +4,8 @@ export enum ROLES {
     USER = 'user',
   }
   
+  export enum RequestStatus {
+    PENDING = 'pending',
+    ACCEPTED = 'accepted',
+    DECLINED = 'declined',
+  }
