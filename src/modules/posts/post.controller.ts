@@ -65,7 +65,7 @@ export class PostController {
 
     //get all posts by user
     @Roles(ROLES.USER, ROLES.ADMIN)
-    @Get('user/:userId')
+    @Get('users/:userId')
     findAllByUser(
         @Param('userId', ParseIntPipe) userId: number,
     ): Promise<Posts[]> {
@@ -101,14 +101,4 @@ export class PostController {
     }
 
 
-    // create or update comment
-    @Roles(ROLES.USER, ROLES.ADMIN)
-    @Post(':postId/comments')
-    createComment(
-        @Param('postId', ParseIntPipe) postId: number,
-        @User() user: { id: number },
-        @Body() comment: CommentDto,
-    ): Promise<CommentDto> {
-        return this.postService.updataComment(postId, user.id, comment);
-    }
 }

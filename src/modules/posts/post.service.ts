@@ -9,7 +9,6 @@ import {
 
 import { Posts } from './post.model';
 import { CommentService } from '../comments/comment.service';
-import { CommentDto } from '../comments/dto/comment.dto';
 import { PostDto } from './dto/post.dto';
 
 import { ERRORS, PROVIDERS } from '../../common/constants';
@@ -132,9 +131,7 @@ export class PostService {
    
       const posts = await this.postRepository.findAll({
         where: { userId },
-        order: [
-          ['createdAt', 'DESC'],
-        ],
+      
       });
       return posts;
  
@@ -156,7 +153,6 @@ export class PostService {
   // Find one post by with comments
   async findPostWithComments(postId: number): Promise<any> {
 
-   
       // find post
       const post = await this.getPostById(postId);
       if (!post) {
@@ -168,33 +164,6 @@ export class PostService {
    
   }
 
-  // update a comment if found or create it for a post useing upsert
-  async updataComment(
-    postId: number,
-    userId: number,
-    comment: CommentDto,
-  ): Promise<any> {
-    const foundComment = await this.commentService.findCommentsByUser(postId, userId)
-    if (foundComment) {
-      await this.commentService.updateComment(postId, userId, comment)
-    }else{
-      return "comment not found"
-    }
-
-   
-  }
-
-  // create or update comment on post
-  async createOrUpdateComment(postId: number, userId: number, comment: CommentDto): Promise<CommentDto> {
-    // check if post exists
-    const post = await this.getPostById(postId)
-    if (!post) {
-      throw new HttpException(ERRORS.POST_NOT_FOUND, 404)
-    }
-    await this.updataComment(postId, userId, comment)
-    return comment
-  }
- 
 
 
 }

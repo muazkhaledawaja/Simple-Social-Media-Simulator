@@ -4,7 +4,6 @@ import {
     Put,
     Body,
     Post,
-    Query,
     Controller,
     ParseIntPipe,
     Delete,
@@ -21,59 +20,70 @@ import { Roles, User } from '../../common/decorators';
 export class CommentController {
     constructor(private readonly commentService: CommentService) { }
 
+
+    // create a comment for a post
+    @Post(':postId')
+    @Roles(ROLES.USER)
+    createComment(
+        @User() user: { id: number },
+        @Param('postId', ParseIntPipe) postId: number,
+        @Body() commentDto: CommentDto
+    ) {
+        return this.commentService.createComment(postId, user.id, commentDto);
+    }
+
+
     // get all comments for a post
-    @Get()
+    @Get(':postId/all')
     findAllComments(
         @Param('postId', ParseIntPipe) postId: number
     ) {
         return this.commentService.findAllComments(postId);
+
     }
+
+
     // get all comments for a post by user
-    @Get('user')
+    @Get('/user')
     @Roles(ROLES.USER)
     findCommentsByUser(
-        @User('id') userId: number,
-        @Query('postId', ParseIntPipe) postId: number
+        @User() user: { id: number },
     ) {
-        return this.commentService.findCommentsByUser(postId, userId);
+        return this.commentService.findCommentsByUser(  user.id);
     }
 
-    // create a comment for a post
-    @Post()
-    @Roles(ROLES.USER)
-    createComment(
-        @User('id') userId: number,
-        @Param('postId', ParseIntPipe) postId: number,
-        @Body() commentDto: CommentDto
-    ) {
-        return this.commentService.createComment(postId, userId, commentDto);
-    }
 
     // update a comment for a post
-    @Put(':commentId')
-    @Roles(ROLES.USER)
+    @Put('/:postId/:commentId')
+     @Roles(ROLES.USER)
     updateComment(
-        @User('id') userId: number,
+        @User() user: { id: number },
         @Param('postId', ParseIntPipe) postId: number,
-        @Body() commentDto: CommentDto
+         @Param('commentId', ParseIntPipe) id: number,
+        @Body() comment: CommentDto,
+    
     ) {
-        return this.commentService.updateComment(postId, userId, commentDto);
+        return this.commentService.updateComment(postId, user.id, comment, id);
     }
 
     // delete a comment for a post
-    @Delete(':commentId')
+    @Delete('/:postId/:commentId')
     @Roles(ROLES.USER)
     deleteComment(
-        @User('id') userId: number,
+        @User() user: { id: number },
         @Param('postId', ParseIntPipe) postId: number,
-     
+         @Param('commentId', ParseIntPipe) id: number,
+
     ) {
-        return this.commentService.deleteComment(postId, userId);
+        return this.commentService.deleteComment(postId, user.id, id);
     }
- 
-    
+
+
 
 
 
 
 }
+
+ 
+ 

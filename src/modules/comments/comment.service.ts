@@ -12,6 +12,25 @@ export class CommentService {
         private readonly commentRepository: typeof Comments,
     ) { }
 
+    // create a comment for a post
+    async createComment(
+        postId: number,
+        userId: number,
+        commentDto: CommentDto
+    ): Promise<any> {
+
+        const comment = await this.commentRepository.create<Comments>({
+            ...commentDto,
+            postId,
+            userId,
+            createdBy: userId,
+            updatedBy: userId,
+        })
+        return comment && 'Comment created successfully'
+    }
+
+
+
     // find all comments for a post
     async findAllComments(postId: number): Promise<Comments[]> {
         const comments = await this.commentRepository.findAll({
@@ -22,58 +41,54 @@ export class CommentService {
         return comments;
     }
 
+
+
     // find a comment by user id 
-    async findCommentsByUser(postId: number, userId: number): Promise<Comments[]> {
+    async findCommentsByUser(userId: number): Promise<Comments[]> {
         const comment = await this.commentRepository.findAll({
-            where: { postId, userId },
+            where: { userId },
 
         })
         return comment;
     }
 
 
-    // create a comment for a post
-    async createComment(
-        postId: number,
-        userId: number,
-        commentDto: CommentDto
-    ): Promise<Comments> {
-
-        const comment = await this.commentRepository.create<Comments>({
-            ...commentDto,
-            postId,
-            userId,
-            createdBy: userId,
-            updatedBy: userId,
-        })
-        return comment;
-    }
 
     // update a comment for a post
     async updateComment(
         postId: number,
         userId: number,
-        commentDto: CommentDto
-    ): Promise<void> {
+        comment: CommentDto,
+        id: number
 
-        await this, this.commentRepository.upsert({
-            ...commentDto,
-            postId,
-            userId,
-            updatedBy: userId
-
+    ): Promise<any> {
+        const Ifcomment = await this.commentRepository.findOne({
+            where: { postId, userId, id }
+        })
+        if (!Ifcomment) {
+            throw new InternalServerErrorException(ERRORS.COMMENT_NOT_FOUND)
         }
+        return await this.commentRepository.update(comment, { where: { postId, userId, updatedBy: userId, id } }
         )
     }
 
     // delete a comment for a post
-    async deleteComment(postId: number, userId: number): Promise<string> {
+    async deleteComment(
+        postId: number,
+        userId: number,
+        id: number
 
-        const comment = await this.commentRepository.destroy({
-            where: { postId, userId, }
+    ): Promise<any> {
+        const Ifcomment = await this.commentRepository.findOne({
+            where: { postId, userId, id }
         })
-        return `this ${comment}Comment deleted successfully`
+        if (!Ifcomment) {
+            throw new InternalServerErrorException(ERRORS.COMMENT_NOT_FOUND)
+        }
 
+        return await this.commentRepository.destroy({
+            where: { postId, userId, id }
+        })
     }
 
 }
