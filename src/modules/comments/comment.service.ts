@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { CommentDto } from '../../modules/comments/dto/comment.dto';
-import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Inject, Injectable, HttpException } from '@nestjs/common';
 import { PROVIDERS, ERRORS } from '../../common/constants';
 import { Comments } from './comment.model';
 
@@ -66,7 +66,7 @@ export class CommentService {
             where: { postId, userId, id }
         })
         if (!Ifcomment) {
-            throw new InternalServerErrorException(ERRORS.COMMENT_NOT_FOUND)
+            throw new HttpException(ERRORS.COMMENT_NOT_FOUND,404)
         }
         return await this.commentRepository.update(comment, { where: { postId, userId, updatedBy: userId, id } }
         )
@@ -83,7 +83,8 @@ export class CommentService {
             where: { postId, userId, id }
         })
         if (!Ifcomment) {
-            throw new InternalServerErrorException(ERRORS.COMMENT_NOT_FOUND)
+            throw new HttpException(ERRORS.COMMENT_NOT_FOUND,404)
+
         }
 
         return await this.commentRepository.destroy({
