@@ -4,6 +4,7 @@ import { Injectable, Inject } from "@nestjs/common";
 import { Block } from "./block.model";
 import { BlockDto } from "./dto/block.dto";
 import { RequestStatus } from 'common/enum';
+import { Users } from '../users/user.model';
 import { UserService } from 'modules/users/user.service';
 @Injectable()
 export class BlockService {
@@ -41,7 +42,7 @@ export class BlockService {
               }
               
           // Add the blocker's ID to the blocked user's array
-          blockedUser.blocked_users.push(blockerId);
+          blockedUser.blocked_users = [...blockedUser.blocked_users, blockerId];
        
       
           // Save the updated user

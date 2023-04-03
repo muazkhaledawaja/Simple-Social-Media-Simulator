@@ -3,7 +3,6 @@ import { Module } from '@nestjs/common';
 import { BlockController } from './block.controller';
 import { BlockService } from './block.service';
 import { blockProvider } from './block.providers';
-import { UserService} from '../users/user.service';
 import { UserModule } from './../users/user.module';
 
 @Module({
