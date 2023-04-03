@@ -58,27 +58,35 @@ export class BlockService {
     // function to unblock
     async unblock(blockId: number): Promise<any> {
         try {
-            return this.blockRepository.update(
-                { status: RequestStatus.UNBLOCKED },
-                {
-                    where: { id: blockId },
-                }
-            )
+            const block = await this.blockRepository.findOne({ where: { id: blockId } });
+            if (!block) {
+                throw new Error(`Block with ID ${blockId} not found`);
+            }
+
+            block.status = RequestStatus.UNBLOCKED;
+            await block.save();
+
+            await this.blockRepository.destroy({ where: { id: blockId } });
+            return;
         } catch (error) {
-            throw new Error(`Failed to Unblock: ${error.message}`);
+            throw new Error(`Failed to unblock: ${error.message}`);
         }
     }
-
+    
     // middleware to check if user is blocked
-    async isBlocked(blockerId: number, blockedId: number): Promise<boolean> {
+    async isBlocked(blockDto: BlockDto): Promise<boolean> {
         try {
+            const { blockerId, blockedId } = blockDto;
+
             // Check if the users exist in the database
             const count = await this.blockRepository.count({
                 where: { blockerId, blockedId },
             });
+
             return count > 0;
         } catch (error) {
             throw new Error(`Failed to check if user is blocked: ${error.message}`);
         }
     }
+
 }
