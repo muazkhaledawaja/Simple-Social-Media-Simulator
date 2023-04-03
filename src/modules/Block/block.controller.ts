@@ -2,8 +2,6 @@
 import {
     Body,
     Controller,
-    Delete,
-    Get,
     HttpCode,
     HttpException,
     HttpStatus,

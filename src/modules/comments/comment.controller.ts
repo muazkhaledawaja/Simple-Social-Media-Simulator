@@ -8,12 +8,15 @@ import {
     ParseIntPipe,
     Delete,
     Param,
+    UseGuards,
+    ForbiddenException,
 } from '@nestjs/common';
 
 import { CommentService } from './comment.service';
 import { CommentDto } from './dto/comment.dto';
 import { ROLES } from '../../common/enum';
-import { Roles, User } from '../../common/decorators';
+import { Roles, User, Block } from '../../common/decorators';
+import { BlockGuard } from 'common/guards/block.guard';
 
 
 @Controller('comments')
@@ -24,11 +27,16 @@ export class CommentController {
     // create a comment for a post
     @Post(':postId')
     @Roles(ROLES.USER)
+    @UseGuards(BlockGuard)
     createComment(
         @User() user: { id: number },
         @Param('postId', ParseIntPipe) postId: number,
-        @Body() commentDto: CommentDto
+        @Body() commentDto: CommentDto,
+        @Block() isBlocked: boolean
     ) {
+        if (isBlocked) {
+            throw new ForbiddenException('You are blocked by this user');
+        }
         return this.commentService.createComment(postId, user.id, commentDto);
     }
 
@@ -49,19 +57,19 @@ export class CommentController {
     findCommentsByUser(
         @User() user: { id: number },
     ) {
-        return this.commentService.findCommentsByUser(  user.id);
+        return this.commentService.findCommentsByUser(user.id);
     }
 
 
     // update a comment for a post
     @Put('/:postId/:commentId')
-     @Roles(ROLES.USER)
+    @Roles(ROLES.USER)
     updateComment(
         @User() user: { id: number },
         @Param('postId', ParseIntPipe) postId: number,
-         @Param('commentId', ParseIntPipe) id: number,
+        @Param('commentId', ParseIntPipe) id: number,
         @Body() comment: CommentDto,
-    
+
     ) {
         return this.commentService.updateComment(postId, user.id, comment, id);
     }
@@ -72,7 +80,7 @@ export class CommentController {
     deleteComment(
         @User() user: { id: number },
         @Param('postId', ParseIntPipe) postId: number,
-         @Param('commentId', ParseIntPipe) id: number,
+        @Param('commentId', ParseIntPipe) id: number,
 
     ) {
         return this.commentService.deleteComment(postId, user.id, id);
@@ -85,5 +93,5 @@ export class CommentController {
 
 }
 
- 
- 
+
+
