@@ -5,5 +5,6 @@ export const PROVIDERS = {
     POSTS_PROVIDER: 'postsProvider',
     COMMENTS_PROVIDER: 'commentsProvider',
     FRIEND_REQUEST_PROVIDER: 'friendRequestProvider',
+    BLOCK_PROVIDER: 'blockProvider',
   };
   

@@ -20,12 +20,14 @@ export class AuthGuard implements CanActivate {
         if (isPublic) return true;
 
         const request = context.switchToHttp().getRequest();
-        const token = request.headers.authorization || request.headers['x-access-token'] || request.headers.token;
+        const token = request.headers.authorization
+            || request.headers['x-access-token']
+            || request.headers.token;
         if (!token) return false;
 
 
-        const decoded = verifyToken(token, SYSTEM.SECRET);
-        if (!decoded) return false;
+        const decoded = verifyToken(token, SYSTEM.SECRET) as any;
+        if ( !decoded) return false;
 
 
         const userCheck = await this.userService.checkUser({

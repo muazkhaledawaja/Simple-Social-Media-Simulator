@@ -72,7 +72,11 @@ export class PostService {
         throw new HttpException(ERRORS.POST_NOT_FOUND, 404);
       }
       const comments = await this.commentService.findAllComments(postId);
-      return comments;
+      return {
+      post:  {
+        comments
+      }
+      };
  
   }
 
@@ -107,17 +111,7 @@ export class PostService {
    
   }
 
-  // get all posts from database
-  async getAllPostsFromDb(): Promise<Posts[]> {
-    
-      const posts = await this.postRepository.findAll({
-        order: [
-          ['createdAt', 'DESC'],
-        ],
-      });
-      return posts;
-  
-  }
+ 
 
   //get all timeline posts
   async getAllTimeLinePosts(): Promise<any> {

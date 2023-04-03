@@ -97,7 +97,7 @@ export class PostController {
     findAllComments(
         @Param('postId', ParseIntPipe) postId: number,
     ): Promise<CommentDto[]> {
-        return this.postService.findAllComments(postId);
+        return this.postService.findPostWithComments(postId);
     }
 
 

@@ -1,22 +1,20 @@
 /* eslint-disable prettier/prettier */
 import {
-  Column,
-  DataType,
   Model,
-  PrimaryKey,
-  Scopes,
   Table,
-  AutoIncrement,
+  Column,
+  PrimaryKey,
   ForeignKey,
+  Scopes,
+  AutoIncrement,
+  DataType,
   BelongsTo
 } from 'sequelize-typescript';
+import { Users } from '../users/user.model';
 import { RequestStatus } from '../../common/enum';
-import { Users } from 'modules/users/user.model';
-
-
 
 @Table({
-  tableName: 'FriendRequest',
+  tableName: 'Block',
   timestamps: true,
   paranoid: true,
   underscored: true,
@@ -29,51 +27,53 @@ import { Users } from 'modules/users/user.model';
     basic: {
       attributes: {
         exclude: [
+          'updated_at',
+          'updated_by',
+          'created_by',
+          'deleted_at',
+          "deleted_by",
           "created_at",
-          "updated_at"
         ],
       },
     },
   };
 })
-export class FriendRequest extends Model {
+export class Block extends Model<Block> {
+
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
   id: number;
 
+  @ForeignKey(() => Users)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  blockerId: number;
+
+  @BelongsTo(() => Users)
+  blocker: Users;
 
   @ForeignKey(() => Users)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })
-  senderId: number;
+  blockedId: number;
 
   @BelongsTo(() => Users)
-  sender: Users;
+  blocked: Users;
 
-  @ForeignKey(() => Users)
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-  })
-  recipientId: number;
-
-  @BelongsTo(() => Users)
-  recipient: Users;
 
   @Column({
-    type: DataType.BOOLEAN,
-    defaultValue: false,
-
-  })
-  isAccepted: boolean;
-
-  @Column({
-    type: DataType.ENUM(RequestStatus.ACCEPTED, RequestStatus.DECLINED, RequestStatus.PENDING, RequestStatus.UNFRIEND, RequestStatus.BLOCKED),
-    defaultValue: RequestStatus.PENDING,
+    type: DataType.ENUM(RequestStatus.UNBLOCKED, RequestStatus.BLOCKED),
+    defaultValue: RequestStatus.BLOCKED,
   })
   status: RequestStatus;
-}
+ 
 
+
+
+
+}

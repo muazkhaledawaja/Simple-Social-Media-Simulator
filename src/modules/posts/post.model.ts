@@ -12,7 +12,6 @@ import {
   BelongsTo,
 
 } from 'sequelize-typescript';
-import * as moment from 'moment';
 
 
 
@@ -63,7 +62,7 @@ export class Posts extends Model<Posts> {
   content: string;
 
 
- @Column({
+  @Column({
     type: DataType.INTEGER
   })
   createdBy: number;

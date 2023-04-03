@@ -38,6 +38,18 @@ export class UserService {
             where
         })
     }
+
+// function to check if user exists by id
+    async checkUserById(id: number): Promise<Users> {
+        return this.usersRepository.findOne({
+
+            where: {    
+                id
+            }
+        })
+    }
+    
+
     //function to create new user
     async signup(user: SignupDto): Promise<User | any> {
         try {

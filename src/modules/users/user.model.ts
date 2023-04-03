@@ -9,7 +9,8 @@ import {
   AutoIncrement,
   Unique,
   HasMany,
-  Scopes
+  Scopes,
+  BelongsToMany
 } from 'sequelize-typescript';
 import { ROLES } from '../../common/enum/index';
 import { Posts } from '../posts/post.model';
@@ -106,4 +107,11 @@ export class Users extends Model<Users> {
 
   @HasMany(() => Comments)
   comments: Comments[];
+
+  @Column({
+    type: DataType.ARRAY(DataType.INTEGER),
+    allowNull: true,
+    defaultValue: [],
+  })
+  blocked_users: number[];
 }

@@ -1,11 +1,10 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Inject } from '@nestjs/common';
-import { Injectable } from "@nestjs/common";
+
+import { Injectable,Inject } from "@nestjs/common";
 import { FriendRequest } from "./friend-request.model";
 import { FriendRequestDto } from "./dto/friend-request.dto";
 import { PROVIDERS } from 'common/constants';
-import { throwError } from 'rxjs';
 
 @Injectable()
 export class FriendRequestService {
@@ -40,8 +39,9 @@ export class FriendRequestService {
     async acceptFriendRequest(requestId: number): Promise<any> {
         try {
             return this.friendRequestRepository.update(
-                { isAccepted: true },
-                { where: { id: requestId } }
+                { isAccepted: true,status: 'accepted' },
+                { where: { id: requestId } ,
+            }
             )
         } catch (error) {
             throw new Error(`Failed to accept friend request: ${error.message}`);
@@ -53,7 +53,7 @@ export class FriendRequestService {
     async declineFriendRequest(requestId: number): Promise<any> {
         try {
         return this.friendRequestRepository.update(   
-            { isAccepted: false },
+            { isAccepted: false,status: 'declined' },
             { where: { id: requestId } });
             
         } catch (error) {
@@ -77,6 +77,18 @@ export class FriendRequestService {
             
         } catch (error) {
             throw new Error(`Failed to delete friend request: ${error.message}`);
+        }
+    }
+
+    // function to unfriend
+    async unfriend(requestId: number): Promise<any> {
+        try {
+        return this.friendRequestRepository.update(   
+            { isAccepted: false,status: 'unfriended' },
+            { where: { id: requestId } });
+            
+        } catch (error) {
+            throw new Error(`Failed to unfriend: ${error.message}`);
         }
     }
 

@@ -7,6 +7,7 @@ import { Users } from "../../modules/users/user.model";
 import { Posts } from "../../modules/posts/post.model";
 import { Comments } from "../../modules/comments/comment.model";
 import { FriendRequest } from "../../modules/friend-request/friend-request.model";
+import { Block } from "modules/Block/block.model";
 
 
 
@@ -18,8 +19,7 @@ export const databaseProviders = [
       const sequelize = new Sequelize({
         ...configService.get('database'),
       });
-      sequelize.addModels([Users, Posts, Comments,FriendRequest]);
-      return sequelize;
+      sequelize.addModels([Users, Posts, Comments,FriendRequest,Block]);
     },
   },
 ];

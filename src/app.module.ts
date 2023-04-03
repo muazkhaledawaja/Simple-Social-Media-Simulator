@@ -7,6 +7,7 @@ import { CommentModule } from './modules/comments/comment.module';
 import { DatabaseModule } from './modules/database/database.module';
 import { PostModule } from './modules/posts/post.module';
 import { FriendRequestModule } from './modules/friend-request/friend-request.module';
+import { BlockModule } from './modules/Block/block.module';
 
 import config from '../config';
 
@@ -17,6 +18,7 @@ import config from '../config';
     DatabaseModule,
     PostModule,
     FriendRequestModule,
+    BlockModule,
     ConfigModule.forRoot({
       load: [config],
       isGlobal: true,

@@ -67,7 +67,9 @@ export class FriendRequestController {
     }
 
     @Get("all/:userId")
-    async getFriendRequests(@User() user: Users) {
+    async getFriendRequests(
+        @User() user: Users
+        ) {
         try {
             return await this.friendRequestService.findFriendRequestBySender(user.id);
         } catch (error) {
