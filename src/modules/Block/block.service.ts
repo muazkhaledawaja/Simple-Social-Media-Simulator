@@ -55,25 +55,6 @@ export class BlockService {
         }
     }
 
-    // function to unblock
-    // change this from
-    async unblock(blockId: number): Promise<any> {
-        try {
-            const block = await this.blockRepository.findOne({ where: { id: blockId } });
-            if (!block) {
-                throw new Error(`Block with ID ${blockId} not found`);
-            }
-
-            block.status = RequestStatus.UNBLOCKED;
-            await block.save();
-
-            await this.blockRepository.destroy({ where: { id: blockId } });
-            return;
-        } catch (error) {
-            throw new Error(`Failed to unblock: ${error.message}`);
-        }
-    }
-
     async deleteBlock(blockerId: number, blockedId: number): Promise<any> {
 
         // check if the users exist in the database
