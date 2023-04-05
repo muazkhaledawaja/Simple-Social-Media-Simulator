@@ -29,13 +29,14 @@ export class BlockController {
         }
     }
 
-    @Put('/unblock/:blockId')
+    @Put('/unblock/:blockerId/:blockedId')
     @HttpCode(HttpStatus.NO_CONTENT)
-    async unblock(
-        @Param('blockId') blockId: number
+    async unblockUser(
+        @Param('blockerId') blockerId: number,
+        @Param('blockedId') blockedId: number
     ): Promise<any> {
         try {
-            return await this.blockService.unblock(blockId);
+            return await this.blockService.deleteBlock(blockerId, blockedId);
         } catch (error) {
             throw new HttpException(`Failed to unblock user: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
         }
