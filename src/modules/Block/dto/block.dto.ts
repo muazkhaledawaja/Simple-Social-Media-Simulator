@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsNumber } from 'class-validator';
+import { IsNumber ,  } from 'class-validator';
 
 export class BlockDto {
   @IsNumber()
@@ -7,6 +7,8 @@ export class BlockDto {
 
   @IsNumber()
   blockedId: number;
+  
+  isBlocked: boolean;
 
 
 }

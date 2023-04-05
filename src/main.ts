@@ -3,9 +3,8 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 
 import { AppModule } from './app.module';
-import { AuthGuard, BlockGuard, RolesGuard } from './common/guards';
+import { AuthGuard, RolesGuard } from './common/guards';
 import { UserService } from './modules/users/user.service';
-import { CommentService } from 'modules/comments/comment.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

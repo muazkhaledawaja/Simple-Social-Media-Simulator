@@ -56,6 +56,7 @@ export class BlockService {
     }
 
     // function to unblock
+    // change this from
     async unblock(blockId: number): Promise<any> {
         try {
             const block = await this.blockRepository.findOne({ where: { id: blockId } });
@@ -73,20 +74,4 @@ export class BlockService {
         }
     }
     
-    // middleware to check if user is blocked
-    // async isBlocked(blockDto: BlockDto): Promise<boolean> {
-    //     try {
-    //         const { blockerId, blockedId } = blockDto;
-
-    //         // Check if the users exist in the database
-    //         const count = await this.blockRepository.count({
-    //             where: { blockerId, blockedId },
-    //         });
-
-    //         return count > 0;
-    //     } catch (error) {
-    //         throw new Error(`Failed to check if user is blocked: ${error.message}`);
-    //     }
-    // }
-
 }

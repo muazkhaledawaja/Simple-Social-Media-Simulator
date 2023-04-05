@@ -17,7 +17,7 @@ import { CommentDto } from './dto/comment.dto';
 import { ROLES } from '../../common/enum';
 import { CheckBlocked, Roles, User } from '../../common/decorators';
 import { BlockGuard } from 'common/guards';
- 
+ import { BlockDto } from 'modules/Block/dto/block.dto';
 
 
 @Controller('comments')
@@ -30,17 +30,13 @@ export class CommentController {
     // create a comment for a post
     @Post('/:postId')
     @Roles(ROLES.USER)
-    @UseGuards(BlockGuard)
     createComment(
         @User() user: { id: number },
         @Param('postId', ParseIntPipe) postId: number,
         @Body() commentDto: CommentDto,
-        @CheckBlocked() isBlocked: boolean
+    @CheckBlocked() any: any,
+       
     ) {
-        console.log(666666,isBlocked);
-        
-      if(isBlocked) throw new ForbiddenException('You are blocked from this user')
-         
         return this.commentService.createComment(postId, user.id, commentDto);
     }
 

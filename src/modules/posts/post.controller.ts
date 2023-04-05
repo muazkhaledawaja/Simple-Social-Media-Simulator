@@ -9,8 +9,7 @@ import {
     Controller,
     ParseIntPipe,
     Delete,
-    UseGuards,
-    ForbiddenException,
+   
 
 } from '@nestjs/common';
 
