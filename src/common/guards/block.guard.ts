@@ -3,7 +3,6 @@ import { CanActivate, ExecutionContext, ForbiddenException, Inject, Injectable }
 import { PROVIDERS } from 'common/constants';
 import { Block } from 'modules/Block/block.model';
 import { Posts } from 'modules/posts/post.model';
-
 @Injectable()
 export class BlockGuard implements CanActivate {
     constructor(
@@ -19,9 +18,8 @@ export class BlockGuard implements CanActivate {
         try {
             const post = await this.postRepository.findOne({ where: { id: postId } });
             if (!post) {
-                return false; //chane to throw new error('Not Found...')
+                throw new Error('Post not found');
             }
-
 
             const blockerId = post.userId;
 
@@ -29,10 +27,11 @@ export class BlockGuard implements CanActivate {
                 where: { blockerId, blockedId },
             });
 
+            if (count === 0) {
+                throw new ForbiddenException('Access denied');
+            }
 
-            if (count === 0) throw new ForbiddenException('Not Found...')
-            else return true;
-
+            return true;
         } catch (error) {
             throw new Error(`Failed to check if user is blocked: ${error.message}`);
         }

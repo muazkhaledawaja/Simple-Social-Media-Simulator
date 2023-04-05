@@ -15,25 +15,30 @@ import { FriendRequest } from './friend-request.model';
 import { FriendRequestDto } from './dto/friend-request.dto';
 import { FriendRequestService } from './friend-request.service';
 import { Users } from '../users/user.model';
-import { User } from 'common/decorators';
+import { User ,CheckBlocked} from 'common/decorators';
 
 @Controller('friend-request')
 export class FriendRequestController {
     constructor(private friendRequestService: FriendRequestService) { }
 
     @Post()
-    async createFriendRequest(@Body() friendRequestDto: FriendRequestDto): Promise<FriendRequest> {
-        try {
-            return await this.friendRequestService.createFriendRequest(friendRequestDto);
-        } catch (error) {
-            throw new HttpException(`Failed to create friend request: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    async createFriendRequest(
+      @Body() friendRequestDto: FriendRequestDto,
+      @CheckBlocked()  any,
+    ): Promise<FriendRequest> {
+      try {
+        return await this.friendRequestService.createFriendRequest(friendRequestDto);
+      } catch (error) {
+        throw new HttpException(`Failed to create friend request: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
     }
-
+    
     
     @Get(':recipientId')
     async findFriendRequestByRecipient(
-        @Param('recipientId') recipientId: number
+        @Param('recipientId') recipientId: number,
+        @CheckBlocked() any ,
+
     ): Promise<FriendRequest[]> {
         try {
             return await this.friendRequestService.findFriendRequestByRecipient(recipientId);
@@ -68,7 +73,8 @@ export class FriendRequestController {
 
     @Get("all/:userId")
     async getFriendRequests(
-        @User() user: Users
+        @User() user: Users,
+        @CheckBlocked() any ,
         ) {
         try {
             return await this.friendRequestService.findFriendRequestBySender(user.id);

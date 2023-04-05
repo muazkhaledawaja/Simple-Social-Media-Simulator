@@ -29,6 +29,7 @@ export class BlockController {
         }
     }
 
+
     @Put('/unblock/:blockerId/:blockedId')
     @HttpCode(HttpStatus.NO_CONTENT)
     async unblockUser(

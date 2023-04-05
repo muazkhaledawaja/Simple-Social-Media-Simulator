@@ -59,7 +59,7 @@ export class UserService {
                 username: user.username,
             });
             if (checkUserWithEmailOrUsername) {
-                throw new HttpException(ERRORS.USER_ALREADY_EXISTS, HttpStatus.BAD_REQUEST);
+                throw new HttpException(ERRORS.USER.ALREADY_EXISTS, HttpStatus.BAD_REQUEST);
             }
 
             // hash password
@@ -92,7 +92,7 @@ export class UserService {
             }
             );
             if (!user) {
-                throw new HttpException(ERRORS.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+                throw new HttpException(ERRORS.USER.NOT_FOUND, HttpStatus.NOT_FOUND);
             }
             // check if password is correct
             const isPasswordCorrect = await comparePassword(
@@ -100,7 +100,7 @@ export class UserService {
                 user.password,
             );
             if (!isPasswordCorrect) {
-                throw new HttpException(ERRORS.INCORRECT_DATA, HttpStatus.BAD_REQUEST);
+                throw new HttpException(ERRORS.USER.INCORRECT_DATA, HttpStatus.BAD_REQUEST);
             }
             // delete user password
             delete user.password;

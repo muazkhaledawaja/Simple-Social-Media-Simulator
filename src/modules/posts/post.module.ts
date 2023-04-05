@@ -9,7 +9,6 @@ import { PostController } from './post.controller';
 import { postProvider } from './post.provider';
 import { PostService } from './post.service';
 import { BlockGuard } from 'common/guards';
-import { BlockModule } from 'modules/Block/block.module';
 import { blockProvider } from 'modules/Block/block.providers';
 
 

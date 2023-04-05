@@ -38,7 +38,7 @@ export class PostService {
 
       const foundPost = await this.getPostById(postId);
       if (!foundPost) {
-        throw new HttpException(ERRORS.POST_NOT_FOUND, 404);
+        throw new HttpException(ERRORS.POST.NOT_FOUND, 404);
       }
       await this.postRepository.update(post, { where: { id: postId } });
       return foundPost;
@@ -50,7 +50,7 @@ export class PostService {
    
       const post = await this.getPostById(postId);
       if (!post) {
-        throw new HttpException(ERRORS.POST_NOT_FOUND, 404);
+        throw new HttpException(ERRORS.POST.NOT_FOUND, 404);
       }
       await this.postRepository.destroy({ where: { id: postId } });
       return post;
@@ -69,7 +69,7 @@ export class PostService {
     
       const post = await this.getPostById(postId);
       if (!post) {
-        throw new HttpException(ERRORS.POST_NOT_FOUND, 404);
+        throw new HttpException(ERRORS.POST.NOT_FOUND, 404);
       }
       const comments = await this.commentService.findAllComments(postId);
       return {
@@ -87,7 +87,7 @@ export class PostService {
         where: { id: postId },
       });
       if (!post) {
-        throw new HttpException(ERRORS.POST_NOT_FOUND, 404);
+        throw new HttpException(ERRORS.POST.NOT_FOUND, 404);
       }
 
       return post;
@@ -150,7 +150,7 @@ export class PostService {
       // find post
       const post = await this.getPostById(postId);
       if (!post) {
-        throw new HttpException(ERRORS.POST_NOT_FOUND, 404);
+        throw new HttpException(ERRORS.POST.NOT_FOUND, 404);
       }
       // find comments
       const comments = await this.commentService.findAllComments(postId);

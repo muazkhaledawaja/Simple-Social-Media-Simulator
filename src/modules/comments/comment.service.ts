@@ -66,7 +66,7 @@ export class CommentService {
             where: { postId, userId, id }
         })
         if (!Ifcomment) {
-            throw new HttpException(ERRORS.COMMENT_NOT_FOUND, 404)
+            throw new HttpException(ERRORS.COMMENT.NOT_FOUND, 404)
         }
         return await this.commentRepository.update(comment, { where: { postId, userId, updatedBy: userId, id } }
         )
@@ -83,7 +83,7 @@ export class CommentService {
             where: { postId, userId, id }
         })
         if (!Ifcomment) {
-            throw new HttpException(ERRORS.COMMENT_NOT_FOUND, 404)
+            throw new HttpException(ERRORS.COMMENT.NOT_FOUND, 404)
 
         }
 

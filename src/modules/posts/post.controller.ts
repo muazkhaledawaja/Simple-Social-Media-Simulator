@@ -17,7 +17,7 @@ import { PostService } from './post.service';
 import { PostDto } from './dto/post.dto';
 import { CommentDto } from '../comments/dto/comment.dto';
 import { Posts } from './post.model';
-import {  Roles, User } from '../../common/decorators';
+import {  CheckBlocked,Roles, User } from '../../common/decorators';
 import { ROLES } from '../../common/enum';
 
 
@@ -52,6 +52,7 @@ export class PostController {
     @Roles(ROLES.USER, ROLES.ADMIN)
     @Get('all')
     findAllPosts(
+        @CheckBlocked() any ,
     ): Promise<Posts[]> {
         return this.postService.getAllTimeLinePosts();
     }
@@ -61,6 +62,8 @@ export class PostController {
     @Get(':postId')
     async findOne(
         @Param('postId', ParseIntPipe) postId: number,
+        @CheckBlocked() any ,
+
     ): Promise<Posts> {
         return await this.postService.getPostById(postId);
     }
@@ -71,8 +74,8 @@ export class PostController {
     @Get('users/:userId')
     findAllByUser(
         @Param('userId', ParseIntPipe) userId: number,
+        @CheckBlocked() any ,
     ): Promise<Posts[]> {
-       
         return this.postService.getAllPostsByUserId(userId);
     }
 
@@ -91,6 +94,7 @@ export class PostController {
     @Delete(':postId')
     deleteOnePost(
         @Param('postId', ParseIntPipe) postId: number,
+        @CheckBlocked() any ,
     ): Promise<Posts> {
         return this.postService.deletePost(postId);
     }
@@ -100,6 +104,7 @@ export class PostController {
     @Get(':postId/comments')
     findAllComments(
         @Param('postId', ParseIntPipe) postId: number,
+        @CheckBlocked() any ,
     ): Promise<CommentDto[]> {
         return this.postService.findPostWithComments(postId);
     }

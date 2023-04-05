@@ -9,7 +9,6 @@ import {
     Delete,
     Param,
     UseGuards,
-    ForbiddenException,
 } from '@nestjs/common';
 
 import { CommentService } from './comment.service';
@@ -17,7 +16,6 @@ import { CommentDto } from './dto/comment.dto';
 import { ROLES } from '../../common/enum';
 import { CheckBlocked, Roles, User } from '../../common/decorators';
 import { BlockGuard } from 'common/guards';
- import { BlockDto } from 'modules/Block/dto/block.dto';
 
 
 @Controller('comments')
@@ -26,7 +24,7 @@ export class CommentController {
         private readonly commentService: CommentService,
     ) { }
 
- 
+
     // create a comment for a post
     @Post('/:postId')
     @Roles(ROLES.USER)
@@ -34,8 +32,8 @@ export class CommentController {
         @User() user: { id: number },
         @Param('postId', ParseIntPipe) postId: number,
         @Body() commentDto: CommentDto,
-    @CheckBlocked() any: any,
-       
+        @CheckBlocked() any,
+
     ) {
         return this.commentService.createComment(postId, user.id, commentDto);
     }
@@ -46,20 +44,18 @@ export class CommentController {
     @UseGuards(BlockGuard)
     findAllComments(
         @Param('postId', ParseIntPipe) postId: number,
-      
+        @CheckBlocked() any,
     ) {
-       
         return this.commentService.findAllComments(postId);
-
     }
 
 
     // get all comments for a post by user
     @Get('/user')
     @Roles(ROLES.USER)
-    
     findCommentsByUser(
         @User() user: { id: number },
+        @CheckBlocked() any,
     ) {
         return this.commentService.findCommentsByUser(user.id);
     }
@@ -85,18 +81,8 @@ export class CommentController {
         @User() user: { id: number },
         @Param('postId', ParseIntPipe) postId: number,
         @Param('commentId', ParseIntPipe) id: number,
-
     ) {
         return this.commentService.deleteComment(postId, user.id, id);
     }
 
-
-
-
-
-
 }
-
-
-
- 

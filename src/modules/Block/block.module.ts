@@ -9,13 +9,16 @@ import { postProvider } from 'modules/posts/post.provider';
 import { CommentService } from 'modules/comments/comment.service';
 import { commentProvider } from 'modules/comments/comment.provider';
 import { BlockGuard } from 'common/guards';
-import { PostModule } from 'modules/posts/post.module';
-import { CommentModule } from 'modules/comments/comment.module';
+
 
 @Module({
    imports: [UserModule ],
     controllers: [BlockController],
-    providers: [BlockService , ...blockProvider,PostService,...postProvider,CommentService,...commentProvider,BlockGuard],
+    providers: [
+        BlockService , ...blockProvider,
+        PostService,...postProvider,
+        CommentService,...commentProvider,BlockGuard
+    ],
     exports: [BlockService],
   
 })
