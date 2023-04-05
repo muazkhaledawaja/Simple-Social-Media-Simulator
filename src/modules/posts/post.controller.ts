@@ -18,9 +18,8 @@ import { PostService } from './post.service';
 import { PostDto } from './dto/post.dto';
 import { CommentDto } from '../comments/dto/comment.dto';
 import { Posts } from './post.model';
-import { Block, Roles, User } from '../../common/decorators';
+import {  Roles, User } from '../../common/decorators';
 import { ROLES } from '../../common/enum';
-import { BlockGuard } from 'common/guards/block.guard';
 
 
 
@@ -71,14 +70,10 @@ export class PostController {
     //get all posts by user
     @Roles(ROLES.USER, ROLES.ADMIN)
     @Get('users/:userId')
-    @UseGuards(BlockGuard)
     findAllByUser(
         @Param('userId', ParseIntPipe) userId: number,
-        @Block() isBlocked: boolean
     ): Promise<Posts[]> {
-        if (isBlocked) {
-            throw new ForbiddenException('You are blocked by this user');
-        }
+       
         return this.postService.getAllPostsByUserId(userId);
     }
 

@@ -158,6 +158,12 @@ export class PostService {
    
   }
 
+  //fine post 
+  async findPost(postId: number): Promise<Posts> {
+    return await this.postRepository.findOne({
+      where: { id: postId },
+    });
+  }
 
 
 }

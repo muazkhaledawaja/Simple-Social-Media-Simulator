@@ -10,7 +10,7 @@ import {
 import { SignupDto, LoginDto } from './dto';
 import { User } from '../../common/types';
 import { ERRORS, PROVIDERS } from '../../common/constants';
-import { generateToken, comparePassword ,hashPassword } from '../../common/utils';
+import { generateToken, comparePassword, hashPassword } from '../../common/utils';
 
 
 import { Users } from './user.model';
@@ -22,7 +22,7 @@ export class UserService {
         private readonly usersRepository: typeof Users,
     ) { }
 
-  
+
     //function to check if user already exists
     async checkUser(userNameOrEmail: {
         email: string;
@@ -39,16 +39,16 @@ export class UserService {
         })
     }
 
-// function to check if user exists by id
+    // function to check if user exists by id
     async checkUserById(id: number): Promise<Users> {
         return this.usersRepository.findOne({
 
-            where: {    
+            where: {
                 id
             }
         })
     }
-    
+
 
     //function to create new user
     async signup(user: SignupDto): Promise<User | any> {
@@ -69,10 +69,10 @@ export class UserService {
                 email: user.email,
                 username: user.username,
                 password: hashedPassword,
-       role: user.role
+                role: user.role
             });
             delete newUser.password;
-            return newUser 
+            return newUser
 
         } catch (error) {
             throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR)
@@ -102,13 +102,15 @@ export class UserService {
             if (!isPasswordCorrect) {
                 throw new HttpException(ERRORS.INCORRECT_DATA, HttpStatus.BAD_REQUEST);
             }
+            // delete user password
+            delete user.password;
             return {
                 user: {
                     id: user.id,
                     email: user.email,
                     username: user.username,
                     role: user.role
-                    
+
                 },
                 token: generateToken(user.username, user.id),
             };

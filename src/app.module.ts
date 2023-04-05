@@ -10,6 +10,8 @@ import { FriendRequestModule } from './modules/friend-request/friend-request.mod
 import { BlockModule } from './modules/Block/block.module';
 
 import config from '../config';
+import { AuthGuard, BlockGuard } from 'common/guards';
+import { blockProvider } from 'modules/Block/block.providers';
 
 @Module({
   imports: [
@@ -25,6 +27,6 @@ import config from '../config';
   
     }),
   ],
-   
+   providers:[ AuthGuard]
 })
 export class AppModule {}

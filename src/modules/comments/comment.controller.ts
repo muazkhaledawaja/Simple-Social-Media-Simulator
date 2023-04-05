@@ -15,37 +15,44 @@ import {
 import { CommentService } from './comment.service';
 import { CommentDto } from './dto/comment.dto';
 import { ROLES } from '../../common/enum';
-import { Roles, User, Block } from '../../common/decorators';
-import { BlockGuard } from 'common/guards/block.guard';
+import { CheckBlocked, Roles, User } from '../../common/decorators';
+import { BlockGuard } from 'common/guards';
+ 
 
 
 @Controller('comments')
 export class CommentController {
-    constructor(private readonly commentService: CommentService) { }
+    constructor(
+        private readonly commentService: CommentService,
+    ) { }
 
-
+ 
     // create a comment for a post
-    @Post(':postId')
+    @Post('/:postId')
     @Roles(ROLES.USER)
     @UseGuards(BlockGuard)
     createComment(
         @User() user: { id: number },
         @Param('postId', ParseIntPipe) postId: number,
         @Body() commentDto: CommentDto,
-        @Block() isBlocked: boolean
+        @CheckBlocked() isBlocked: boolean
     ) {
-        if (isBlocked) {
-            throw new ForbiddenException('You are blocked by this user');
-        }
+        console.log(666666,isBlocked);
+        
+      if(isBlocked) throw new ForbiddenException('You are blocked from this user')
+         
         return this.commentService.createComment(postId, user.id, commentDto);
     }
 
 
     // get all comments for a post
     @Get(':postId/all')
+    @UseGuards(BlockGuard)
     findAllComments(
-        @Param('postId', ParseIntPipe) postId: number
+        @Param('postId', ParseIntPipe) postId: number,
+      
     ) {
+       
         return this.commentService.findAllComments(postId);
 
     }
@@ -54,6 +61,7 @@ export class CommentController {
     // get all comments for a post by user
     @Get('/user')
     @Roles(ROLES.USER)
+    
     findCommentsByUser(
         @User() user: { id: number },
     ) {
@@ -95,3 +103,4 @@ export class CommentController {
 
 
 
+ 
