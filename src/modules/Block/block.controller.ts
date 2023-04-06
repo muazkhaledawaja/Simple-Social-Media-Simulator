@@ -12,6 +12,7 @@ import {
 import { Block } from './block.model';
 import { BlockDto } from './dto/block.dto';
 import { BlockService } from './block.service';
+import { User } from 'common/decorators';
 
 
 @Controller('user')
@@ -21,9 +22,12 @@ export class BlockController {
     ) { }
 
     @Post('/block')
-    async block(@Body() blockDto: BlockDto): Promise<Block> {
+    async block(
+        @Body() blockDto: BlockDto,
+        @User() user: { id: number },
+        ): Promise<Block> {
         try {
-            return await this.blockService.block(blockDto);
+            return await this.blockService.block(blockDto, user.id);
         } catch (error) {
             throw new HttpException(`Failed to block user: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
         }

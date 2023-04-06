@@ -67,11 +67,14 @@ export class Block extends Model<Block> {
 
 
   @Column({
-    type: DataType.ENUM(RequestStatus.UNBLOCKED, RequestStatus.BLOCKED),
+    type: DataType.ENUM(
+      RequestStatus.UNBLOCKED,
+      RequestStatus.BLOCKED
+    ),
     defaultValue: RequestStatus.BLOCKED,
   })
   status: RequestStatus;
- 
+
 
 
 

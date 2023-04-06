@@ -32,7 +32,7 @@ export class CommentController {
         @User() user: { id: number },
         @Param('postId', ParseIntPipe) postId: number,
         @Body() commentDto: CommentDto,
-        @CheckBlocked() any,
+        // @CheckBlocked() any,
 
     ) {
         return this.commentService.createComment(postId, user.id, commentDto);
@@ -41,10 +41,10 @@ export class CommentController {
 
     // get all comments for a post
     @Get(':postId/all')
-    @UseGuards(BlockGuard)
+    // @UseGuards(BlockGuard)
     findAllComments(
         @Param('postId', ParseIntPipe) postId: number,
-        @CheckBlocked() any,
+        // @CheckBlocked() any,
     ) {
         return this.commentService.findAllComments(postId);
     }
@@ -55,7 +55,7 @@ export class CommentController {
     @Roles(ROLES.USER)
     findCommentsByUser(
         @User() user: { id: number },
-        @CheckBlocked() any,
+        // @CheckBlocked() any,
     ) {
         return this.commentService.findCommentsByUser(user.id);
     }

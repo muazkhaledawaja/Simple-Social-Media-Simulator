@@ -71,7 +71,14 @@ export class FriendRequest extends Model {
   isAccepted: boolean;
 
   @Column({
-    type: DataType.ENUM(RequestStatus.ACCEPTED, RequestStatus.DECLINED, RequestStatus.PENDING, RequestStatus.UNFRIEND, RequestStatus.BLOCKED),
+    type: DataType.ENUM(
+      RequestStatus.ACCEPTED,
+      RequestStatus.DECLINED,
+      RequestStatus.PENDING,
+      RequestStatus.UNFRIEND,
+      RequestStatus.BLOCKED,
+      RequestStatus.UNBLOCKED
+    ),
     defaultValue: RequestStatus.PENDING,
   })
   status: RequestStatus;

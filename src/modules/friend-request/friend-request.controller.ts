@@ -14,8 +14,7 @@ import {
 import { FriendRequest } from './friend-request.model';
 import { FriendRequestDto } from './dto/friend-request.dto';
 import { FriendRequestService } from './friend-request.service';
-import { Users } from '../users/user.model';
-import { User ,CheckBlocked} from 'common/decorators';
+import { User } from 'common/decorators';
 
 @Controller('friend-request')
 export class FriendRequestController {
@@ -23,73 +22,81 @@ export class FriendRequestController {
 
     @Post()
     async createFriendRequest(
-      @Body() friendRequestDto: FriendRequestDto,
-      @CheckBlocked()  any,
+        @Body() friendRequestDto: FriendRequestDto,
+        @User() user: { id: number },
     ): Promise<FriendRequest> {
-      try {
-        return await this.friendRequestService.createFriendRequest(friendRequestDto);
-      } catch (error) {
-        throw new HttpException(`Failed to create friend request: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
-      }
+        try {
+            return await this.friendRequestService.createFriendRequest(friendRequestDto, user.id);
+        } catch (error) {
+            throw new HttpException(`Failed to create friend request: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-    
-    
+
+
     @Get(':recipientId')
     async findFriendRequestByRecipient(
         @Param('recipientId') recipientId: number,
-        @CheckBlocked() any ,
+        @User() user: { id: number },
 
     ): Promise<FriendRequest[]> {
         try {
-            return await this.friendRequestService.findFriendRequestByRecipient(recipientId);
+            return await this.friendRequestService.findFriendRequestByRecipient(recipientId, user.id);
         } catch (error) {
             throw new HttpException(`Failed to find friend request by recipient: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+
+    // api to accept friend request
     @Put(':requestId/accept')
     @HttpCode(HttpStatus.NO_CONTENT)
     async acceptFriendRequest(
-        @Param('requestId') requestId: number
+        @Param('requestId') requestId: number,
+        @User() user: { id: number },
     ): Promise<any> {
         try {
-            return await this.friendRequestService.acceptFriendRequest(requestId);
+            return await this.friendRequestService.acceptFriendRequest(requestId, user.id);
         } catch (error) {
-            throw new HttpException(`Failed to accept friend request: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(`Failed to accept friend request: ${error.message}`, HttpStatus.METHOD_NOT_ALLOWED);
         }
     }
+    // api to decline friend request
 
     @Put(':requestId/decline')
     @HttpCode(HttpStatus.NO_CONTENT)
     async declineFriendRequest(
-        @Param('requestId') requestId: number
+        @Param('requestId') requestId: number,
+        @User() user: { id: number },
+
     ): Promise<number> {
         try {
-            return await this.friendRequestService.declineFriendRequest(requestId);
+            return await this.friendRequestService.declineFriendRequest(requestId, user.id);
         } catch (error) {
-            throw new HttpException(`Failed to decline friend request: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(`Failed to decline friend request: ${error.message}`, HttpStatus.METHOD_NOT_ALLOWED);
         }
     }
 
-    @Get("all/:userId")
+    @Get("all/:senderId")
     async getFriendRequests(
-        @User() user: Users,
-        @CheckBlocked() any ,
-        ) {
+        @Param('senderId') senderId: number,
+        @User() user: { id: number },
+    ) {
         try {
-            return await this.friendRequestService.findFriendRequestBySender(user.id);
+            return await this.friendRequestService.findFriendRequestBySender(senderId, user.id);
         } catch (error) {
-            throw new HttpException(`Failed to view all friend requests: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(`Failed to view all friend requests: ${error.message}`, HttpStatus.METHOD_NOT_ALLOWED);
         }
     }
 
     @Delete(':requestId')
     @HttpCode(HttpStatus.NO_CONTENT)
     async deleteFriendRequest(
-        @Param('requestId') requestId: number
+        @Param('requestId') requestId: number,
+        @User() user: { id: number },
+
     ): Promise<number> {
         try {
-            return await this.friendRequestService.deleteFriendRequest(requestId);
+            return await this.friendRequestService.deleteFriendRequest(requestId, user.id);
         } catch (error) {
             throw new HttpException(`Failed to delete friend request: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -62,12 +62,17 @@ export class CommentService {
         id: number
 
     ): Promise<any> {
-        const Ifcomment = await this.commentRepository.findOne({
-            where: { postId, userId, id }
-        })
+        const Ifcomment = await this.commentRepository.findByPk(id);
         if (!Ifcomment) {
             throw new HttpException(ERRORS.COMMENT.NOT_FOUND, 404)
+
         }
+        const user = Ifcomment.userId;
+        
+        if (user !== userId) {
+            throw new HttpException(ERRORS.USER.NOT_AUTHORIZED, 404);
+        }   
+
         return await this.commentRepository.update(comment, { where: { postId, userId, updatedBy: userId, id } }
         )
     }
@@ -79,13 +84,16 @@ export class CommentService {
         id: number
 
     ): Promise<any> {
-        const Ifcomment = await this.commentRepository.findOne({
-            where: { postId, userId, id }
-        })
+     const Ifcomment = await this.commentRepository.findByPk(id);
         if (!Ifcomment) {
             throw new HttpException(ERRORS.COMMENT.NOT_FOUND, 404)
 
         }
+        const user = Ifcomment.userId;
+        
+        if (user !== userId) {
+            throw new HttpException(ERRORS.USER.NOT_AUTHORIZED, 404);
+        }   
 
         return await this.commentRepository.destroy({
             where: { postId, userId, id }

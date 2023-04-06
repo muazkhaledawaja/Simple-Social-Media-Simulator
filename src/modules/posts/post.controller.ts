@@ -33,7 +33,6 @@ export class PostController {
     createPost(
         @Body() post: PostDto,
         @User() user: { id: number },
-
     ): Promise<Posts> {
         return this.postService.createPost(post, user.id);
     }
@@ -52,7 +51,6 @@ export class PostController {
     @Roles(ROLES.USER, ROLES.ADMIN)
     @Get('all')
     findAllPosts(
-        @CheckBlocked() any ,
     ): Promise<Posts[]> {
         return this.postService.getAllTimeLinePosts();
     }
@@ -85,8 +83,10 @@ export class PostController {
     updateOnePost(
         @Param('postId', ParseIntPipe) postId: number,
         @Body() post: PostDto,
+        @User() user: { id: number },
+        @CheckBlocked() any ,
     ): Promise<Posts> {
-        return this.postService.updatePost(postId, post);
+        return this.postService.updatePost(postId, post, user.id);
     }
 
     // delete a post
@@ -94,9 +94,10 @@ export class PostController {
     @Delete(':postId')
     deleteOnePost(
         @Param('postId', ParseIntPipe) postId: number,
+        @User() user: { id: number },
         @CheckBlocked() any ,
     ): Promise<Posts> {
-        return this.postService.deletePost(postId);
+        return this.postService.deletePost(postId, user.id);
     }
 
     // get all comments of a post
@@ -108,6 +109,5 @@ export class PostController {
     ): Promise<CommentDto[]> {
         return this.postService.findPostWithComments(postId);
     }
-
 
 }

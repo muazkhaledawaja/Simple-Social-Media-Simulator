@@ -34,11 +34,15 @@ export class PostService {
   }
 
   //edit post
-  async updatePost(postId: number, post: PostDto): Promise<Posts> {
+  async updatePost(postId: number, post: PostDto,userId:number): Promise<Posts> {
 
       const foundPost = await this.getPostById(postId);
       if (!foundPost) {
         throw new HttpException(ERRORS.POST.NOT_FOUND, 404);
+      }
+      const user = foundPost.userId;
+      if (user !== userId) {
+        throw new HttpException(ERRORS.USER.NOT_AUTHORIZED, 404);
       }
       await this.postRepository.update(post, { where: { id: postId } });
       return foundPost;
@@ -46,11 +50,15 @@ export class PostService {
   }
 
   // delete a post
-  async deletePost(postId: number): Promise<Posts> {
+  async deletePost(postId: number,userId:number): Promise<Posts> {
    
       const post = await this.getPostById(postId);
       if (!post) {
         throw new HttpException(ERRORS.POST.NOT_FOUND, 404);
+      }
+      const user = post.userId;
+      if (user !== userId) {
+        throw new HttpException(ERRORS.USER.NOT_AUTHORIZED, 404);
       }
       await this.postRepository.destroy({ where: { id: postId } });
       return post;

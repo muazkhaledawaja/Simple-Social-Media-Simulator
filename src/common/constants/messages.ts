@@ -5,7 +5,6 @@ export const ERRORS = {
     NOT_FOUND: 'The requested user could not be found.',
     INCORRECT_DATA: 'The provided user data is inaccurate.',
     NOT_AUTHORIZED: 'User not authorized',
-    BLOCKED: 'User is blocked',
     CANNOT_SEND_FRIEND_REQUEST: 'User cannot send friend request',
     ALREADY_FRIEND: 'User is already friend',
     ALREADY_SENT_FRIEND_REQUEST: 'User already sent friend request',
@@ -20,6 +19,12 @@ export const ERRORS = {
   COMMENT: {
     NOT_FOUND: 'The requested comment could not be found.',
 
+  },
+  BLOCK:{
+    NOT_FOUND: 'The requested block could not be found.',
+    NOT_ALLOWED: 'User cannot block himself',
+    BLOCKED: 'User is blocked',
+    FAILED: 'Block failed',
   }
 };
 export const SUCCESS = {
