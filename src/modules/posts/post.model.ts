@@ -108,6 +108,7 @@ export class Posts extends Model<Posts> {
 
   @BelongsTo(() => Users)
   user: Users;
+  watches: any;
 
 
 }

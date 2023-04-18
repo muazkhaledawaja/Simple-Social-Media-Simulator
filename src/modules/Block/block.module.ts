@@ -20,7 +20,7 @@ import { friendRequestProvider } from 'modules/friend-request/friend-request.pro
         PostService,...postProvider,
         CommentService,...commentProvider,
         FriendRequestService,...friendRequestProvider,
-        BlockGuard
+        BlockGuard,
     ],
     exports: [BlockService],
   

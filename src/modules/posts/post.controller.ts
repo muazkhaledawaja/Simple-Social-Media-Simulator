@@ -72,7 +72,7 @@ export class PostController {
     @Get('users/:userId')
     findAllByUser(
         @Param('userId', ParseIntPipe) userId: number,
-        @CheckBlocked() any ,
+        // @CheckBlocked() any ,
     ): Promise<Posts[]> {
         return this.postService.getAllPostsByUserId(userId);
     }
@@ -109,5 +109,6 @@ export class PostController {
     ): Promise<CommentDto[]> {
         return this.postService.findPostWithComments(postId);
     }
+
 
 }

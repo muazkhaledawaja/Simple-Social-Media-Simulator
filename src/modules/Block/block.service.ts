@@ -30,7 +30,6 @@ export class BlockService {
         // check if the user authorized
         if (blockerId !== userId) {
             throw new HttpException(ERRORS.USER.NOT_AUTHORIZED, 404);
-
         }
         // check if the user is blocked
         const blocked = await this.blockRepository.findOne({ where: { blockerId, blockedId } });
@@ -53,8 +52,6 @@ export class BlockService {
             const block = await this.blockRepository.create<Block>(blockDto, { transaction });
             // Update the status
             block.status = RequestStatus.BLOCKED;
-
-
             // // check if there is a friend request
             const friendRequest = await this.friendRepository.findOne
                 ({ where: { senderId: blockerId, recipientId: blockedId } });

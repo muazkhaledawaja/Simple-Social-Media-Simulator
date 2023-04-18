@@ -5,6 +5,7 @@ import { commentProvider } from './comment.provider';
 import { CommentService } from './comment.service';
 import { blockProvider } from 'modules/Block/block.providers';
 import { postProvider } from 'modules/posts/post.provider';
+import { BlockInterceptor } from 'common/interceptor/block.interceptor';
 
 
 

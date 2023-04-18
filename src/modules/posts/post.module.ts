@@ -10,6 +10,7 @@ import { postProvider } from './post.provider';
 import { PostService } from './post.service';
 import { BlockGuard } from 'common/guards';
 import { blockProvider } from 'modules/Block/block.providers';
+import { BlockInterceptor } from 'common/interceptor/block.interceptor';
 
 
 @Module({

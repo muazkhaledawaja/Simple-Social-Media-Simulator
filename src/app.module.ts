@@ -12,6 +12,8 @@ import { BlockModule } from './modules/Block/block.module';
 
 import config from '../config';
 import { AuthGuard } from 'common/guards';
+import { BlockInterceptor } from 'common/interceptor/block.interceptor';
+import { blockProvider } from 'modules/Block/block.providers';
 
 @Module({
   imports: [
@@ -27,6 +29,8 @@ import { AuthGuard } from 'common/guards';
   
     }),
   ],
-   providers:[ AuthGuard]
+   providers:[
+     AuthGuard,
+  ]
 })
 export class AppModule {}

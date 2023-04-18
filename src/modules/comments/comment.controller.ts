@@ -8,14 +8,16 @@ import {
     ParseIntPipe,
     Delete,
     Param,
-    UseGuards,
+    UseInterceptors,
+ 
 } from '@nestjs/common';
 
 import { CommentService } from './comment.service';
 import { CommentDto } from './dto/comment.dto';
 import { ROLES } from '../../common/enum';
 import { CheckBlocked, Roles, User } from '../../common/decorators';
-import { BlockGuard } from 'common/guards';
+import { BlockInterceptor } from 'common/interceptor/block.interceptor';
+ 
 
 
 @Controller('comments')
@@ -28,6 +30,7 @@ export class CommentController {
     // create a comment for a post
     @Post('/:postId')
     @Roles(ROLES.USER)
+    @UseInterceptors(BlockInterceptor)
     createComment(
         @User() user: { id: number },
         @Param('postId', ParseIntPipe) postId: number,
@@ -44,7 +47,7 @@ export class CommentController {
     // @UseGuards(BlockGuard)
     findAllComments(
         @Param('postId', ParseIntPipe) postId: number,
-        // @CheckBlocked() any,
+        @CheckBlocked() any,
     ) {
         return this.commentService.findAllComments(postId);
     }
@@ -55,7 +58,7 @@ export class CommentController {
     @Roles(ROLES.USER)
     findCommentsByUser(
         @User() user: { id: number },
-        // @CheckBlocked() any,
+        @CheckBlocked() any,
     ) {
         return this.commentService.findCommentsByUser(user.id);
     }

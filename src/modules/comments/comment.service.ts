@@ -4,12 +4,15 @@ import { CommentDto } from '../../modules/comments/dto/comment.dto';
 import { Inject, Injectable, HttpException } from '@nestjs/common';
 import { PROVIDERS, ERRORS } from '../../common/constants';
 import { Comments } from './comment.model';
+import { Posts } from '../posts/post.model';
 
 @Injectable()
 export class CommentService {
     constructor(
         @Inject(PROVIDERS.COMMENTS_PROVIDER)
         private readonly commentRepository: typeof Comments,
+        @Inject(PROVIDERS.POSTS_PROVIDER)
+        private readonly postRepository: typeof Posts,
     ) { }
 
     // create a comment for a post
@@ -18,7 +21,11 @@ export class CommentService {
         userId: number,
         commentDto: CommentDto
     ): Promise<any> {
-
+        //check if post exists
+        const post = await this.postRepository.findByPk(postId);
+        if (!post) {
+            throw new HttpException(ERRORS.POST.NOT_FOUND, 404)
+        }
         const comment = await this.commentRepository.create<Comments>({
             ...commentDto,
             postId,

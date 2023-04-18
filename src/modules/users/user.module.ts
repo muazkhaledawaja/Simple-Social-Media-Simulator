@@ -7,6 +7,7 @@ import { BlockService } from 'modules/Block/block.service';
 import { blockProvider } from 'modules/Block/block.providers';
 import { FriendRequestService } from 'modules/friend-request/friend-request.service';
 import { friendRequestProvider } from 'modules/friend-request/friend-request.providers';
+import { BlockInterceptor } from 'common/interceptor/block.interceptor';
 
 @Module({
 

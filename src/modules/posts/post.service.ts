@@ -130,6 +130,15 @@ export class PostService {
 
   // get all posts by user id
   async getAllPostsByUserId(userId: number): Promise<Posts[]> {
+    // check if user exists
+    const user = await this.postRepository.findOne({
+      where: { userId },
+    });
+    if (!user) {
+      throw new HttpException(ERRORS.USER.NOT_FOUND, 404);
+    }
+ console.log(user);
+ 
    
       const posts = await this.postRepository.findAll({
         where: { userId },
@@ -173,5 +182,7 @@ export class PostService {
     });
   }
 
+
+ 
 
 }
