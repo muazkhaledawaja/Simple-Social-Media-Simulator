@@ -7,6 +7,8 @@ import {
     InternalServerErrorException,
 } from '@nestjs/common';
 
+import * as AWS from 'aws-sdk';
+
 import { SignupDto, LoginDto } from './dto';
 import { User } from '../../common/types';
 import { ERRORS, PROVIDERS } from '../../common/constants';
@@ -17,10 +19,20 @@ import { Users } from './user.model';
 
 @Injectable()
 export class UserService {
+    private readonly cognito: AWS.CognitoIdentityServiceProvider;
     constructor(
         @Inject(PROVIDERS.USERS_PROVIDER)
         private readonly usersRepository: typeof Users,
-    ) { }
+    ) {
+
+        // initialize AWS Cognito client
+        this.cognito = new AWS.CognitoIdentityServiceProvider({
+            region: process.env.AWS_REGION,
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        });
+
+    }
 
 
     //function to check if user already exists
@@ -34,23 +46,16 @@ export class UserService {
         } if (userNameOrEmail.username) {
             where.userName = userNameOrEmail.username;
         }
-        return this.usersRepository.findOne({
-            where
-        })
+        return this.usersRepository.findOne({where})
     }
 
     // function to check if user exists by id
     async checkUserById(id: number): Promise<Users> {
-        return this.usersRepository.findOne({
-
-            where: {
-                id
-            }
-        })
+        return this.usersRepository.findOne({ where: {id}})
     }
 
 
-    //function to create new user
+    // function to create new user in Cognito
     async signup(user: SignupDto): Promise<User | any> {
         try {
             // check if user already exists
@@ -61,6 +66,19 @@ export class UserService {
             if (checkUserWithEmailOrUsername) {
                 throw new HttpException(ERRORS.USER.ALREADY_EXISTS, HttpStatus.BAD_REQUEST);
             }
+            // create user in Cognito
+            const params = {
+                UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
+                Username: user.username,
+                Password: user.password,
+                UserAttributes: [
+                    {
+                        Name: 'email',
+                        Value: user.email,
+                    },
+                ],
+            }
+            await this.cognito.adminCreateUser(params).promise();
 
             // hash password
             const hashedPassword = await hashPassword(user.password, 10);
@@ -81,7 +99,20 @@ export class UserService {
     }
     //function to login user
     async login(loginDetails: LoginDto): Promise<any> {
+
         try {
+            const params = {
+                AuthFlow: 'USER_PASSWORD_AUTH',
+                ClientId: 'your_app_client_id',
+                UserPoolId: 'your_user_pool_id',
+                AuthParameters: {
+                    USERNAME: loginDetails.username,
+                    PASSWORD: loginDetails.password,
+                },
+            };
+            const { AuthenticationResult } = await this.cognito.initiateAuth(params).promise();
+
+
             // check if user exists
             const user = await this.usersRepository.findOne({
                 where:
@@ -112,7 +143,7 @@ export class UserService {
                     role: user.role
 
                 },
-                token: generateToken(user.username, user.id),
+                token: AuthenticationResult.IdToken,
             };
         } catch (error) {
             throw new InternalServerErrorException(error)
