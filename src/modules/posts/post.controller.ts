@@ -9,6 +9,7 @@ import {
     Controller,
     ParseIntPipe,
     Delete,
+   
 
 } from '@nestjs/common';
 
@@ -16,8 +17,10 @@ import { PostService } from './post.service';
 import { PostDto } from './dto/post.dto';
 import { CommentDto } from '../comments/dto/comment.dto';
 import { Posts } from './post.model';
-import { Roles, User } from '../../common/decorators';
+import {  CheckBlocked,Roles, User } from '../../common/decorators';
 import { ROLES } from '../../common/enum';
+
+
 
 @Controller('posts')
 export class PostController {
@@ -30,7 +33,6 @@ export class PostController {
     createPost(
         @Body() post: PostDto,
         @User() user: { id: number },
-
     ): Promise<Posts> {
         return this.postService.createPost(post, user.id);
     }
@@ -58,6 +60,8 @@ export class PostController {
     @Get(':postId')
     async findOne(
         @Param('postId', ParseIntPipe) postId: number,
+        @CheckBlocked() any ,
+
     ): Promise<Posts> {
         return await this.postService.getPostById(postId);
     }
@@ -68,6 +72,7 @@ export class PostController {
     @Get('users/:userId')
     findAllByUser(
         @Param('userId', ParseIntPipe) userId: number,
+        // @CheckBlocked() any ,
     ): Promise<Posts[]> {
         return this.postService.getAllPostsByUserId(userId);
     }
@@ -78,8 +83,10 @@ export class PostController {
     updateOnePost(
         @Param('postId', ParseIntPipe) postId: number,
         @Body() post: PostDto,
+        @User() user: { id: number },
+        @CheckBlocked() any ,
     ): Promise<Posts> {
-        return this.postService.updatePost(postId, post);
+        return this.postService.updatePost(postId, post, user.id);
     }
 
     // delete a post
@@ -87,8 +94,10 @@ export class PostController {
     @Delete(':postId')
     deleteOnePost(
         @Param('postId', ParseIntPipe) postId: number,
+        @User() user: { id: number },
+        @CheckBlocked() any ,
     ): Promise<Posts> {
-        return this.postService.deletePost(postId);
+        return this.postService.deletePost(postId, user.id);
     }
 
     // get all comments of a post
@@ -96,8 +105,9 @@ export class PostController {
     @Get(':postId/comments')
     findAllComments(
         @Param('postId', ParseIntPipe) postId: number,
+        @CheckBlocked() any ,
     ): Promise<CommentDto[]> {
-        return this.postService.findAllComments(postId);
+        return this.postService.findPostWithComments(postId);
     }
 
 

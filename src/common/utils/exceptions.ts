@@ -7,7 +7,7 @@ const EXCEPTIONS = {
     throw new HttpException(
       {
         status: HttpStatus.BAD_REQUEST,
-        error: ERRORS.USER_NOT_FOUND,
+        error: ERRORS.USER.NOT_FOUND,
       },
       HttpStatus.BAD_REQUEST,
     );
@@ -16,7 +16,7 @@ const EXCEPTIONS = {
     throw new HttpException(
       {
         status: HttpStatus.BAD_REQUEST,
-        error: ERRORS.INCORRECT_DATA,
+        error: ERRORS.USER.INCORRECT_DATA
       },
       HttpStatus.BAD_REQUEST,
     );
@@ -25,7 +25,7 @@ const EXCEPTIONS = {
     throw new HttpException(
       {
         status: HttpStatus.BAD_REQUEST,
-        error: ERRORS.USER_ALREADY_EXISTS,
+        error: ERRORS.USER.ALREADY_EXISTS,
       },
       HttpStatus.BAD_REQUEST,
     );
@@ -34,7 +34,7 @@ const EXCEPTIONS = {
     throw new HttpException(
       {
         status: HttpStatus.BAD_REQUEST,
-        error: ERRORS.USER_NOT_AUTHORIZED,
+        error: ERRORS.USER.NOT_AUTHORIZED,
       },
       HttpStatus.BAD_REQUEST,
     );
@@ -44,7 +44,7 @@ const EXCEPTIONS = {
     throw new HttpException(
       {
         status: HttpStatus.BAD_REQUEST,
-        error: ERRORS.INCORRECT_DATA,
+        error: ERRORS.USER.INCORRECT_DATA,
       },
       HttpStatus.BAD_REQUEST,
     );

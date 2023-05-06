@@ -2,7 +2,7 @@
 import { Controller, Post, Body } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { SignupDto, LoginDto } from "./dto";
-import { Public } from "../../common/decorators/public.deco";
+import { Public } from "../../common/decorators";
 
 @Controller()
 export class UserController {

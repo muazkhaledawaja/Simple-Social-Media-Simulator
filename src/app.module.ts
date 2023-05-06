@@ -7,8 +7,13 @@ import { CommentModule } from './modules/comments/comment.module';
 import { DatabaseModule } from './modules/database/database.module';
 import { PostModule } from './modules/posts/post.module';
 import { FriendRequestModule } from './modules/friend-request/friend-request.module';
+import { BlockModule } from './modules/Block/block.module';
+
 
 import config from '../config';
+import { AuthGuard } from 'common/guards';
+import { BlockInterceptor } from 'common/interceptor/block.interceptor';
+import { blockProvider } from 'modules/Block/block.providers';
 
 @Module({
   imports: [
@@ -17,12 +22,15 @@ import config from '../config';
     DatabaseModule,
     PostModule,
     FriendRequestModule,
+    BlockModule,
     ConfigModule.forRoot({
       load: [config],
       isGlobal: true,
   
     }),
   ],
-   
+   providers:[
+     AuthGuard,
+  ]
 })
 export class AppModule {}

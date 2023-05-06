@@ -10,7 +10,7 @@ import {
 import { SignupDto, LoginDto } from './dto';
 import { User } from '../../common/types';
 import { ERRORS, PROVIDERS } from '../../common/constants';
-import { generateToken, comparePassword ,hashPassword } from '../../common/utils';
+import { generateToken, comparePassword, hashPassword } from '../../common/utils';
 
 
 import { Users } from './user.model';
@@ -22,7 +22,7 @@ export class UserService {
         private readonly usersRepository: typeof Users,
     ) { }
 
-  
+
     //function to check if user already exists
     async checkUser(userNameOrEmail: {
         email: string;
@@ -38,6 +38,18 @@ export class UserService {
             where
         })
     }
+
+    // function to check if user exists by id
+    async checkUserById(id: number): Promise<Users> {
+        return this.usersRepository.findOne({
+
+            where: {
+                id
+            }
+        })
+    }
+
+
     //function to create new user
     async signup(user: SignupDto): Promise<User | any> {
         try {
@@ -47,7 +59,7 @@ export class UserService {
                 username: user.username,
             });
             if (checkUserWithEmailOrUsername) {
-                throw new HttpException(ERRORS.USER_ALREADY_EXISTS, HttpStatus.BAD_REQUEST);
+                throw new HttpException(ERRORS.USER.ALREADY_EXISTS, HttpStatus.BAD_REQUEST);
             }
 
             // hash password
@@ -57,10 +69,10 @@ export class UserService {
                 email: user.email,
                 username: user.username,
                 password: hashedPassword,
-       role: user.role
+                role: user.role
             });
             delete newUser.password;
-            return newUser 
+            return newUser
 
         } catch (error) {
             throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR)
@@ -80,7 +92,7 @@ export class UserService {
             }
             );
             if (!user) {
-                throw new HttpException(ERRORS.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+                throw new HttpException(ERRORS.USER.NOT_FOUND, HttpStatus.NOT_FOUND);
             }
             // check if password is correct
             const isPasswordCorrect = await comparePassword(
@@ -88,15 +100,17 @@ export class UserService {
                 user.password,
             );
             if (!isPasswordCorrect) {
-                throw new HttpException(ERRORS.INCORRECT_DATA, HttpStatus.BAD_REQUEST);
+                throw new HttpException(ERRORS.USER.INCORRECT_DATA, HttpStatus.BAD_REQUEST);
             }
+            // delete user password
+            delete user.password;
             return {
                 user: {
                     id: user.id,
                     email: user.email,
                     username: user.username,
                     role: user.role
-                    
+
                 },
                 token: generateToken(user.username, user.id),
             };

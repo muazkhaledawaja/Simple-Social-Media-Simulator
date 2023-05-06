@@ -9,7 +9,7 @@ import {
   AutoIncrement,
   Unique,
   HasMany,
-  Scopes
+  Scopes,
 } from 'sequelize-typescript';
 import { ROLES } from '../../common/enum/index';
 import { Posts } from '../posts/post.model';
@@ -106,4 +106,6 @@ export class Users extends Model<Users> {
 
   @HasMany(() => Comments)
   comments: Comments[];
+
+ 
 }

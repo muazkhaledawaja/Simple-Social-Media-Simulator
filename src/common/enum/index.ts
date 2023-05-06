@@ -8,4 +8,7 @@ export enum ROLES {
     PENDING = 'pending',
     ACCEPTED = 'accepted',
     DECLINED = 'declined',
+    UNFRIEND = 'unfriend',
+    BLOCKED = 'blocked',
+    UNBLOCKED = 'unblocked',
   }

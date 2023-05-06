@@ -34,11 +34,15 @@ export class PostService {
   }
 
   //edit post
-  async updatePost(postId: number, post: PostDto): Promise<Posts> {
+  async updatePost(postId: number, post: PostDto,userId:number): Promise<Posts> {
 
       const foundPost = await this.getPostById(postId);
       if (!foundPost) {
-        throw new HttpException(ERRORS.POST_NOT_FOUND, 404);
+        throw new HttpException(ERRORS.POST.NOT_FOUND, 404);
+      }
+      const user = foundPost.userId;
+      if (user !== userId) {
+        throw new HttpException(ERRORS.USER.NOT_AUTHORIZED, 404);
       }
       await this.postRepository.update(post, { where: { id: postId } });
       return foundPost;
@@ -46,11 +50,15 @@ export class PostService {
   }
 
   // delete a post
-  async deletePost(postId: number): Promise<Posts> {
+  async deletePost(postId: number,userId:number): Promise<Posts> {
    
       const post = await this.getPostById(postId);
       if (!post) {
-        throw new HttpException(ERRORS.POST_NOT_FOUND, 404);
+        throw new HttpException(ERRORS.POST.NOT_FOUND, 404);
+      }
+      const user = post.userId;
+      if (user !== userId) {
+        throw new HttpException(ERRORS.USER.NOT_AUTHORIZED, 404);
       }
       await this.postRepository.destroy({ where: { id: postId } });
       return post;
@@ -69,10 +77,14 @@ export class PostService {
     
       const post = await this.getPostById(postId);
       if (!post) {
-        throw new HttpException(ERRORS.POST_NOT_FOUND, 404);
+        throw new HttpException(ERRORS.POST.NOT_FOUND, 404);
       }
       const comments = await this.commentService.findAllComments(postId);
-      return comments;
+      return {
+      post:  {
+        comments
+      }
+      };
  
   }
 
@@ -83,7 +95,7 @@ export class PostService {
         where: { id: postId },
       });
       if (!post) {
-        throw new HttpException(ERRORS.POST_NOT_FOUND, 404);
+        throw new HttpException(ERRORS.POST.NOT_FOUND, 404);
       }
 
       return post;
@@ -107,17 +119,7 @@ export class PostService {
    
   }
 
-  // get all posts from database
-  async getAllPostsFromDb(): Promise<Posts[]> {
-    
-      const posts = await this.postRepository.findAll({
-        order: [
-          ['createdAt', 'DESC'],
-        ],
-      });
-      return posts;
-  
-  }
+ 
 
   //get all timeline posts
   async getAllTimeLinePosts(): Promise<any> {
@@ -128,6 +130,15 @@ export class PostService {
 
   // get all posts by user id
   async getAllPostsByUserId(userId: number): Promise<Posts[]> {
+    // check if user exists
+    const user = await this.postRepository.findOne({
+      where: { userId },
+    });
+    if (!user) {
+      throw new HttpException(ERRORS.USER.NOT_FOUND, 404);
+    }
+ console.log(user);
+ 
    
       const posts = await this.postRepository.findAll({
         where: { userId },
@@ -156,7 +167,7 @@ export class PostService {
       // find post
       const post = await this.getPostById(postId);
       if (!post) {
-        throw new HttpException(ERRORS.POST_NOT_FOUND, 404);
+        throw new HttpException(ERRORS.POST.NOT_FOUND, 404);
       }
       // find comments
       const comments = await this.commentService.findAllComments(postId);
@@ -164,6 +175,14 @@ export class PostService {
    
   }
 
+  //fine post 
+  async findPost(postId: number): Promise<Posts> {
+    return await this.postRepository.findOne({
+      where: { id: postId },
+    });
+  }
 
+
+ 
 
 }

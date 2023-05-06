@@ -12,6 +12,6 @@ export const verifyToken = (token, secret) =>
 
 export const generateToken = (username: string,id:number) => {
   return jwt.sign({ username ,id }, SYSTEM.SECRET, {
-    expiresIn: '10h',
+    expiresIn: '20h',
   });
 };
